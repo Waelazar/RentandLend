@@ -40,11 +40,12 @@ db = SQL("sqlite:///database.db")
 def index():
 
     main_data = db.execute(" select name, description, product.product_id, price, path from product \
-    join product_image i ON product.product_id = i.product_id and i.flag_main_image=1\
-    join images on images.id = i.image_id WHERE user_id = :user_id", user_id=session["user_id"])
+    left outer join product_image i ON product.product_id = i.product_id and i.flag_main_image=1\
+    left outer join images on images.id = i.image_id WHERE user_id = :user_id", user_id=session["user_id"])
 
     for image in main_data:
-        image["path"] = os.path.join(app.config['UPLOAD_FOLDER'], image["path"])
+        if image["path"] != None:
+            image["path"] = os.path.join(app.config['UPLOAD_FOLDER'], image["path"])
 
     return render_template("index.html", products = main_data)
 
@@ -58,6 +59,7 @@ def profile():
 
 
 @app.route("/edit", methods=["GET", "POST"])
+@login_required
 def edit():
     if request.method == "POST":
 
@@ -216,20 +218,36 @@ def add():
     else:
         return render_template("add.html")
 
-@app.route("/edit", methods=["GET","POST"])
+@app.route("/edit_product", methods=["GET","POST"])
 @login_required
-def edit():
+def edit_product():
     product_id = request.args.get("product_id")
     if not product_id:
         return apology("must provice product id", 400)
 
     if request.method == "GET":
-        product = db.execute("select name, description, price, longitude, latitude from product where product_id=:product_id",
-                         product_id=product_id)
+        product = db.execute("select name, description, price, longitude, latitude, product_id from product where product_id=:product_id and user_id=:user_id",
+                         product_id=product_id, user_id=session.get("user_id"))
         if not product:
             return apology("Product does not exist", 404)
 
         return render_template("add.html", product=product[0])
+    else:
+        if not request.form.get("product_name") or not request.form.get("latitude") or not request.form.get("longitude") or not request.form.get("price"):
+            return apology("Missing required field", 400)
+
+        result = db.execute("update product set name=:name, description=:description, latitude=:latitude, longitude=:longitude,"
+                            " price=:price where product_id=:product_id",
+                            name=request.form.get("product_name"),
+                            description=request.form.get("product_description") or "null",
+                            latitude=request.form.get("latitude"),
+                            longitude=request.form.get("longitude"),
+                            price=request.form.get("price"),
+                            product_id=product_id)
+        if not result:
+            return apology("Could not save product",400)
+
+        return redirect("/")
 
 @app.route("/show", methods=["GET"])
 @login_required

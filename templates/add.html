@@ -5,8 +5,8 @@
 {% endblock %}
 
 {% block main %}
-    <form action="/add" method="post" enctype="multipart/form-data">
         {% if product is defined  %}
+        <form action="/edit_product?product_id={{ product.product_id }}" method="post">
         <div class="form-group">
             <input  autofocus class="form-control" name="product_name" placeholder="Product Name" type="text" value="{{ product.name }}"/>
         </div>
@@ -22,7 +22,9 @@
         <div class="form-group">
             <input class="form-control" name="price" placeholder="Price" type="number" step="0.01" value="{{ product.price }}"/>
         </div>
+        <button class="btn btn-primary" type="submit">Edit</button>
         {% else %}
+        <form action="/add" method="post" enctype="multipart/form-data">
         <div class="form-group">
             <input  autofocus class="form-control" name="product_name" placeholder="Product Name" type="text"/>
         </div>
@@ -38,7 +40,6 @@
         <div class="form-group">
             <input class="form-control" name="price" placeholder="Price" type="number" step="0.01"/>
         </div>
-        {% endif %}
         <div class="form-group">
             <input type="file" name="image">
         </div>
@@ -46,5 +47,6 @@
             <input type="file" name="images[]" multiple>
         </div>
         <button class="btn btn-primary" type="submit">Add</button>
+        {% endif %}
     </form>
 {% endblock %}
