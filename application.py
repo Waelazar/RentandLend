@@ -1,7 +1,8 @@
-from cs50 import SQL
+from cs50.sql import SQL
 from flask import Flask, flash, redirect, render_template, request, session
 from flask_session import Session
 from tempfile import mkdtemp
+
 from werkzeug.exceptions import default_exceptions
 from werkzeug.security import check_password_hash, generate_password_hash
 from middleware.apology import apology
@@ -58,7 +59,7 @@ def login():
                           username=request.form.get("username"))
 
         # Ensure username exists and password is correct
-        if len(rows) != 1 or not check_password_hash(rows[0]["hash"], request.form.get("password")):
+        if len(rows) != 1 or not check_password_hash(rows[0]["password_hash"], request.form.get("password")):
             return apology("invalid username and/or password", 403)
 
         # Remember which user has logged in
@@ -95,7 +96,7 @@ def register():
             return apology("must confirm password", 400)
 
         # insert username and hashed password into the db
-        result = db.execute("INSERT INTO users (username, hash) VALUES(:username, :hash)",
+        result = db.execute("INSERT INTO users (username, password_hash) VALUES(:username, :hash)",
                             username=request.form.get("username"), hash=generate_password_hash(password))
         # check if the username is already exist in the db
         if not result:
@@ -110,6 +111,30 @@ def register():
     else:
         return render_template("register.html")
 
+@app.route("/add", methods=["GET", "POST"])
+@login_required
+def add():
+    if request.method == "POST":
+        if not request.form.get("product_name") or not request.form.get("latitude") or not request.form.get("longitude") or not request.form.get("price"):
+            return apology("Missing required field", 400)
+
+        result = db.execute("INSERT INTO product (name, description, user_id, latitude, longitude, price) VALUES(:name, :description, :user_id, :latitude, :longitude, :price)",
+                            name=request.form.get("product_name"),
+                            description=request.form.get("product_description") or "null",
+                            user_id=session.get("user_id"),
+                            latitude=request.form.get("latitude"),
+                            longitude=request.form.get("longitude"),
+                            price=request.form.get("price"))
+
+        if not result:
+            return apology("could not save product", 400)
+
+        return redirect("/")
+    else:
+        return render_template("add.html")
+
+
+
 def errorhandler(e):
     """Handle error"""
     return apology(e.name, e.code)
@@ -118,5 +143,9 @@ def errorhandler(e):
 # listen for errors
 for code in default_exceptions:
     app.errorhandler(code)(errorhandler)
+
+
+if __name__ == '__main__':
+    app.run()
 
 
