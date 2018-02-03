@@ -1,9 +1,13 @@
-from cs50 import SQL
+import os
+from cs50.sql import SQL
 from flask import Flask, flash, redirect, render_template, request, session
 from flask_session import Session
 from tempfile import mkdtemp
+
 from werkzeug.exceptions import default_exceptions
 from werkzeug.security import check_password_hash, generate_password_hash
+from werkzeug.utils import secure_filename
+
 from middleware.apology import apology
 from middleware.login import login_required
 
@@ -23,6 +27,9 @@ def after_request(response):
 app.config["SESSION_FILE_DIR"] = mkdtemp()
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
+app.config['UPLOAD_FOLDER'] = "images"
+ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
+
 Session(app)
 
 
@@ -156,13 +163,66 @@ def register():
 
 
 
+@app.route("/add", methods=["GET", "POST"])
+@login_required
+def add():
+    if request.method == "POST":
+        if not request.form.get("product_name") or not request.form.get("latitude") or not request.form.get("longitude") or not request.form.get("price"):
+            return apology("Missing required field", 400)
+
+        result = db.execute("INSERT INTO product (name, description, user_id, latitude, longitude, price) VALUES(:name, :description, :user_id, :latitude, :longitude, :price)",
+                            name=request.form.get("product_name"),
+                            description=request.form.get("product_description") or "null",
+                            user_id=session.get("user_id"),
+                            latitude=request.form.get("latitude"),
+                            longitude=request.form.get("longitude"),
+                            price=request.form.get("price"))
+
+        if request.files.getlist("images[]"):
+            # found some pictures
+            product_id = result
+            for image in request.files.getlist("images[]"):
+                #save image
+                if image.filename == "" or not allowed_file(image.filename):
+                    return apology("Illegal file", 400)
+                image_id = save_image(image)
+                rs = db.execute("INSERT INTO product_image (product_id, image_id) VALUES (:product_id, :image_id)",
+                                product_id=product_id,
+                                image_id = image_id)
+                if not rs:
+                    return apology("Couldn't save image", 400)
+
+        if not result:
+            return apology("could not save product", 400)
+
+        return redirect("/")
+    else:
+        return render_template("add.html")
+
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 def errorhandler(e):
     """Handle error"""
     return apology(e.name, e.code)
 
+def save_image(image):
+    """
+    save image and return its id
+    """
+    filename = secure_filename(image.filename)
+    image.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+    rs = db.execute("INSERT INTO images (path) values (:data)", data=filename)
+    return rs
 
 # listen for errors
 for code in default_exceptions:
     app.errorhandler(code)(errorhandler)
+
+
+if __name__ == '__main__':
+    app.run()
 
 
