@@ -22,6 +22,17 @@ def after_request(response):
     response.headers["Pragma"] = "no-cache"
     return response
 
+
+def usd(value):
+    """Formats value as USD."""
+    return f"${value:,.2f}"
+
+# Custom filter
+app.jinja_env.filters["usd"] = usd
+
+# To make the usd gloabal and can use it in jinja / https://cs50.stackexchange.com/questions/24690/how-to-call-the-usd-function-in-the-jinja-template-of-quoted-html
+app.jinja_env.globals.update(usd=usd)
+
 # Configure session to use filesystem (instead of signed cookies)
 app.config["SESSION_FILE_DIR"] = mkdtemp()
 app.config["SESSION_PERMANENT"] = False

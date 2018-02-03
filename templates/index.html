@@ -9,12 +9,13 @@
         {% for i in products %}
             <div class="col-md-3 col-sm-6">
                 <div class="thumbnail">
+                <span class="aktion">{{usd(i.price)}}</span>
                    <img src="{{i.path}}">
                    <div class="caption">
                        <h4>{{ i.name }}</h4>
                    </div>
                    <p>
-                       <a href="/show/?product_id={{i.product_id}}" class="btn btn-primary">More Info</a>
+                       <a href="/show?product_id={{i.product_id}}" class="btn btn-primary">More Info</a>
                    </p>
                 </div>
             </div>
