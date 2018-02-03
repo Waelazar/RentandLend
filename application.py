@@ -14,7 +14,6 @@ from middleware.login import login_required
 app = Flask(__name__)
 
 
-
 # Ensure responses aren't cached
 @app.after_request
 def after_request(response):
@@ -27,7 +26,7 @@ def after_request(response):
 app.config["SESSION_FILE_DIR"] = mkdtemp()
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
-app.config['UPLOAD_FOLDER'] = "images"
+app.config['UPLOAD_FOLDER'] = "static/images"
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 
 Session(app)
@@ -39,8 +38,15 @@ db = SQL("sqlite:///database.db")
 @app.route("/")
 @login_required
 def index():
-        # TODO
-    return render_template("index.html")
+
+    main_data = db.execute(" select name, description, product.product_id, price, path from product \
+    join product_image i ON product.product_id = i.product_id and i.flag_main_image=1\
+    join images on images.id = i.image_id WHERE user_id = :user_id", user_id=session["user_id"])
+
+    for image in main_data:
+        image["path"] = os.path.join(app.config['UPLOAD_FOLDER'], image["path"])
+
+    return render_template("index.html", products = main_data)
 
 
 
@@ -63,23 +69,22 @@ def edit():
 
         user = db.execute("SELECT * FROM dashboard WHERE user_id = :user_id ", user_id=session["user_id"])
 
+        file = request.files.get('image')
+        image_id = save_image(file)
+
         if not user :
 
-            db.execute("INSERT INTO dashboard (firstname, lastname, birthday, city, country, user_id) \
-                    VALUES(:firstname, :lastname, :birthday, :city, :country, :user_id)",
+            db.execute("INSERT INTO dashboard (firstname, lastname, birthday, city, country, user_id, image_id) \
+                    VALUES(:firstname, :lastname, :birthday, :city, :country, :user_id, :image_id)",
                     firstname = firstname, lastname = lastname, birthday = birthday,
-                    city= city, country = country, user_id=session["user_id"])
-
-            db.execute("INSERT INTO images (data) VALUES(:image)", image = imagefile)
-
+                    city= city, country = country, user_id=session["user_id"], image_id = image_id)
         else :
 
             db.execute("UPDATE dashboard SET firstname = :firstname, lastname = :lastname, birthday = :birthday, \
-                        city = :city, country = :country , user_id= :user_id",
+                        city = :city, country = :country , user_id= :user_id, image_id = :image_id",
                         firstname = firstname, lastname = lastname, birthday = birthday,
-                        city= city, country = country, user_id=session["user_id"])
+                        city= city, country = country, user_id=session["user_id"], image_id = image_id)
 
-            db.execute("INSERT INTO images (data) VALUES(:image)", image = imagefile)
 
         return redirect("/profile")
     else:
@@ -178,9 +183,21 @@ def add():
                             longitude=request.form.get("longitude"),
                             price=request.form.get("price"))
 
-        if request.files.getlist("images[]"):
-            # found some pictures
-            product_id = result
+        #main image
+        img = request.files.get('image')
+        # found some pictures
+        product_id = result
+        if img:
+            #save image
+            if img.filename == "" or not allowed_file(img.filename):
+                return apology("Illegal main file", 400)
+
+            image_id = save_image(img)
+            rs = db.execute("INSERT INTO product_image (product_id, image_id, flag_main_image) VALUES (:product_id, :image_id, 1)",
+                            product_id=product_id,
+                            image_id = image_id)
+        # additional images
+        if request.files.getlist("images[]") and len(request.files.getlist("images[]")) >= 2 :
             for image in request.files.getlist("images[]"):
                 #save image
                 if image.filename == "" or not allowed_file(image.filename):

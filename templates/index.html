@@ -5,21 +5,20 @@
 {% endblock %}
 
 {% block main %}
-    <table class="table table-striped" style="width:100%">
-      <tr>
-        <th>column 1</th>
-        <th>column 2</th>
-        <th>column 3</th>
-        <th>column 4</th>
-        <th>column 5</th>
-      </tr>
-      <tr>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-      </tr>
-    </table>
+     <div class="row text-center" style="display:flex; flex-wrap: wrap;">
+        {% for i in products %}
+            <div class="col-md-3 col-sm-6">
+                <div class="thumbnail">
+                   <img src="{{i.path}}">
+                   <div class="caption">
+                       <h4>{{ i.name }}</h4>
+                   </div>
+                   <p>
+                       <a href="/show/?product_id={{i.product_id}}" class="btn btn-primary">More Info</a>
+                   </p>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
 
 {% endblock %}
