@@ -9,6 +9,8 @@ from middleware.login import login_required
 
 app = Flask(__name__)
 
+
+
 # Ensure responses aren't cached
 @app.after_request
 def after_request(response):
@@ -28,12 +30,53 @@ db = SQL("sqlite:///database.db")
 
 
 @app.route("/")
-# @login_required
+@login_required
 def index():
         # TODO
     return render_template("index.html")
 
 
+
+@app.route("/profile", methods=["GET", "POST"])
+@login_required
+def profile():
+        # TODO
+    return render_template("profile.html")
+
+
+@app.route("/edit", methods=["GET", "POST"])
+def edit():
+    if request.method == "POST":
+
+        firstname = request.form.get("firstname")
+        lastname = request.form.get("lastname")
+        birthday = request.form.get("birthday")
+        city = request.form.get("city")
+        country = request.form.get("country")
+
+        user = db.execute("SELECT * FROM dashboard WHERE user_id = :user_id ", user_id=session["user_id"])
+
+        if not user :
+
+            db.execute("INSERT INTO dashboard (firstname, lastname, birthday, city, country, user_id) \
+                    VALUES(:firstname, :lastname, :birthday, :city, :country, :user_id)",
+                    firstname = firstname, lastname = lastname, birthday = birthday,
+                    city= city, country = country, user_id=session["user_id"])
+
+            db.execute("INSERT INTO images (data) VALUES(:image)", image = imagefile)
+
+        else :
+
+            db.execute("UPDATE dashboard SET firstname = :firstname, lastname = :lastname, birthday = :birthday, \
+                        city = :city, country = :country , user_id= :user_id",
+                        firstname = firstname, lastname = lastname, birthday = birthday,
+                        city= city, country = country, user_id=session["user_id"])
+
+            db.execute("INSERT INTO images (data) VALUES(:image)", image = imagefile)
+
+        return redirect("/profile")
+    else:
+        return render_template("edit.html")
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -58,7 +101,7 @@ def login():
                           username=request.form.get("username"))
 
         # Ensure username exists and password is correct
-        if len(rows) != 1 or not check_password_hash(rows[0]["hash"], request.form.get("password")):
+        if len(rows) != 1 or not check_password_hash(rows[0]["password_hash"], request.form.get("password")):
             return apology("invalid username and/or password", 403)
 
         # Remember which user has logged in
@@ -95,7 +138,7 @@ def register():
             return apology("must confirm password", 400)
 
         # insert username and hashed password into the db
-        result = db.execute("INSERT INTO users (username, hash) VALUES(:username, :hash)",
+        result = db.execute("INSERT INTO users (username, password_hash) VALUES(:username, :hash)",
                             username=request.form.get("username"), hash=generate_password_hash(password))
         # check if the username is already exist in the db
         if not result:
@@ -109,6 +152,9 @@ def register():
     # User reached route via GET
     else:
         return render_template("register.html")
+
+
+
 
 def errorhandler(e):
     """Handle error"""
