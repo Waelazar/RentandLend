@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Product Details
+{% endblock %}
+
+{% block main %}
+    <table class="table table-striped" style="width:100%">
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Price</th>
+        <th></th>
+      </tr>
+      <tr>
+          <td>{{ product["name"]}}</td>
+          <td>{{ product["description"]}}</td>
+          <td>{{ product["price"]}}</td>
+          <td><img src="{{ image_paths[0]["path"]}}"></td>
+      </tr>
+    </table>
+
+{% endblock %}

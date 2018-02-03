@@ -6,6 +6,23 @@
 
 {% block main %}
     <form action="/add" method="post" enctype="multipart/form-data">
+        {% if product is defined  %}
+        <div class="form-group">
+            <input  autofocus class="form-control" name="product_name" placeholder="Product Name" type="text" value="{{ product.name }}"/>
+        </div>
+        <div class="form-group">
+            <input class="form-control" name="product_description" placeholder="Description" type="text" value="{{ product.description }}"/>
+        </div>
+        <div class="form-group">
+            <input class="form-control" name="latitude" placeholder="Latitude" type="text" value="{{ product.latitude }}"/>
+        </div>
+        <div class="form-group">
+            <input class="form-control" name="longitude" placeholder="Longitude" type="text" value="{{ product.longitude }}"/>
+        </div>
+        <div class="form-group">
+            <input class="form-control" name="price" placeholder="Price" type="number" step="0.01" value="{{ product.price }}"/>
+        </div>
+        {% else %}
         <div class="form-group">
             <input  autofocus class="form-control" name="product_name" placeholder="Product Name" type="text"/>
         </div>
@@ -21,6 +38,7 @@
         <div class="form-group">
             <input class="form-control" name="price" placeholder="Price" type="number" step="0.01"/>
         </div>
+        {% endif %}
         <div class="form-group">
             <input type="file" name="image">
         </div>

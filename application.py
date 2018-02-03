@@ -216,6 +216,44 @@ def add():
     else:
         return render_template("add.html")
 
+@app.route("/edit", methods=["GET","POST"])
+@login_required
+def edit():
+    product_id = request.args.get("product_id")
+    if not product_id:
+        return apology("must provice product id", 400)
+
+    if request.method == "GET":
+        product = db.execute("select name, description, price, longitude, latitude from product where product_id=:product_id",
+                         product_id=product_id)
+        if not product:
+            return apology("Product does not exist", 404)
+
+        return render_template("add.html", product=product[0])
+
+@app.route("/show", methods=["GET"])
+@login_required
+def show():
+    product_id = request.args.get("product_id")
+    if not product_id:
+        return apology("must provice product id",400)
+
+    product = db.execute("select name, description, price from product where product_id=:product_id",
+                     product_id=product_id)
+    if not product:
+        return apology("Product does not exist", 404)
+
+    # order -> show main image first
+    image_paths = db.execute("select path, flag_main_image from images "
+                             " join product_image on image_id=images.id"
+                             " where product_id=:product_id"
+                             " order by flag_main_image desc",
+                             product_id=product_id)
+
+    for image in image_paths:
+        image["path"] = os.path.join(app.config['UPLOAD_FOLDER'], image["path"])
+
+    return render_template("detail.html", product = product[0], image_paths = image_paths)
 
 def allowed_file(filename):
     return '.' in filename and \
