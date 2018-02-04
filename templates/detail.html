@@ -22,7 +22,7 @@
                 <div class="caption-full">
                     <h4 class="text-right">Price {{ usd(product["price"]) }}</h4>
                     <h4 class="text-left"><a>{{ product["name"] }}</a></h4>
-                    <p class="text-left paragraph">{{ product["description"] }}</p>
+                    <p class="text-left paragraph1">{{ product["description"] }}</p>
                     <p class="text-left">
                         <em>Submitted By {{ product["username"] }}</em>
                     </p>
@@ -33,8 +33,8 @@
             </div>
             <br>
             <div class="card">
-                 {% for msg in messages %}
                 <div class="row" id="messages">
+                 {% for msg in messages %}
                     <div class="col-md-6">
                     <p class="text-left paragraph"><strong>{{ msg.username }}</strong></p>
                     </div>
@@ -45,10 +45,10 @@
                     <p class="text-left paragraph">
                         {{msg.text}}
                     </p>
-                    </div>
+                    <hr>
                 </div>
-                <hr>
                 {% endfor %}
+                </div>
                 <div class="row">
                     <div class="col-md-6 text-left">
                         <textarea type="text" id="myMessage" rows="4" cols="50"></textarea>

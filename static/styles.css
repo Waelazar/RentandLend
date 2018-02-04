@@ -177,3 +177,8 @@ main img
     margin-top: 10px;
     margin-right: 10px;
 }
+paragraph1 {
+    margin-top: 10px;
+    margin-right: 10px;
+    text-align: justify !important;
+}
