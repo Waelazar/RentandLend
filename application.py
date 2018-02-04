@@ -11,7 +11,11 @@ from werkzeug.utils import secure_filename
 from middleware.apology import apology
 from middleware.login import login_required
 
+from flask_socketio import SocketIO, send
+from datetime import datetime
+
 app = Flask(__name__)
+socketio = SocketIO(app)
 
 
 # Ensure responses aren't cached
@@ -185,7 +189,8 @@ def register():
 @login_required
 def add():
     if request.method == "POST":
-        if not request.form.get("product_name") or not request.form.get("latitude") or not request.form.get("longitude") or not request.form.get("price"):
+        if not request.form.get("product_name") or not request.form.get("latitude") or not request.form.get("longitude")\
+                or not request.form.get("price") or not request.files.get('image'):
             return apology("Missing required field", 400)
 
         result = db.execute("INSERT INTO product (name, description, user_id, latitude, longitude, price) VALUES(:name, :description, :user_id, :latitude, :longitude, :price)",
@@ -284,9 +289,17 @@ def show():
     for image in image_paths:
         image["path"] = os.path.join(app.config['UPLOAD_FOLDER'], image["path"])
 
+    messages = db.execute("select text, username, product_id, time from messages"
+                          " join users on users.id=messages.user_id"
+                          " where product_id=:product_id",
+                          product_id=product_id)
+
+    return render_template("detail.html", product = product[0], image_paths = image_paths, user_id=session["user_id"],
+                           messages=messages)
     is_own_product = session["user_id"] == product[0]["user_id"]
 
-    return render_template("detail.html", product = product[0],product_owner = is_own_product, image_paths = image_paths)
+    return render_template("detail.html", product = product[0],product_owner = is_own_product, image_paths = image_paths, user_id=session["user_id"],
+                           messages=messages))
 
 @app.route("/logout")
 def logout():
@@ -297,6 +310,21 @@ def logout():
 
     # Redirect user to login form
     return redirect("/")
+
+@socketio.on('message')
+def handleMessage(msg):
+    print('Message: ' + msg["message"] + " from user " + str(msg["user_id"]))
+    rs = db.execute("select username from users where id=:user_id",
+               user_id=msg["user_id"])
+    if not rs:
+        return
+    msg["username"] = rs[0]["username"]
+    msg["time"] = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    send(msg, broadcast=True)
+    db.execute("insert into messages(text, user_id, product_id) values (:txt,:user_id,:product_id)",
+               txt=msg["message"],
+               user_id=msg["user_id"],
+               product_id=msg["product_id"])
 
 def allowed_file(filename):
     return '.' in filename and \
@@ -321,6 +349,7 @@ for code in default_exceptions:
 
 
 if __name__ == '__main__':
-    app.run()
+    socketio.run(app)
+
 
 
