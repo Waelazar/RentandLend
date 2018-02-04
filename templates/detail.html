@@ -5,19 +5,16 @@
 {% endblock %}
 
 {% block main %}
-    <table class="table table-striped" style="width:100%">
-      <tr>
-        <th>Name</th>
-        <th>Description</th>
-        <th>Price</th>
-        <th></th>
-      </tr>
-      <tr>
-          <td>{{ product["name"]}}</td>
-          <td>{{ product["description"]}}</td>
-          <td>{{ product["price"]}}</td>
-          <td><img src="{{ image_paths[0]["path"]}}"></td>
-      </tr>
-    </table>
+
+          <div>{{ product["name"] }}</div>
+          <div>{{ product["description"] }}</div>
+          <div>{{ usd(product["price"]) }}</div>
+          <div class="thumbnail"><img src="{{ image_paths[0]["path"]}}"></div>
+          {% if product_owner %}
+          <a href="/edit_product?product_id={{product["product_id"]}}">edit me</a>
+          {% else %}
+          <h1>HELLO</h1>
+          {% endif %}
+
 
 {% endblock %}

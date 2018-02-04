@@ -52,7 +52,7 @@ def index():
 
     main_data = db.execute(" select name, description, product.product_id, price, path from product \
     left outer join product_image i ON product.product_id = i.product_id and i.flag_main_image=1\
-    left outer join images on images.id = i.image_id WHERE user_id = :user_id", user_id=session["user_id"])
+    left outer join images on images.id = i.image_id" )
 
     for image in main_data:
         if image["path"] != None:
@@ -260,6 +260,7 @@ def edit_product():
 
         return redirect("/")
 
+
 @app.route("/show", methods=["GET"])
 @login_required
 def show():
@@ -267,8 +268,9 @@ def show():
     if not product_id:
         return apology("must provice product id",400)
 
-    product = db.execute("select name, description, price from product where product_id=:product_id",
+    product = db.execute("select name, description, price, product_id, user_id from product where product_id=:product_id",
                      product_id=product_id)
+
     if not product:
         return apology("Product does not exist", 404)
 
@@ -282,7 +284,19 @@ def show():
     for image in image_paths:
         image["path"] = os.path.join(app.config['UPLOAD_FOLDER'], image["path"])
 
-    return render_template("detail.html", product = product[0], image_paths = image_paths)
+    is_own_product = session["user_id"] == product[0]["user_id"]
+
+    return render_template("detail.html", product = product[0],product_owner = is_own_product, image_paths = image_paths)
+
+@app.route("/logout")
+def logout():
+    """Log user out"""
+
+    # Forget any user_id
+    session.clear()
+
+    # Redirect user to login form
+    return redirect("/")
 
 def allowed_file(filename):
     return '.' in filename and \
