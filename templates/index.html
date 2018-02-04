@@ -5,13 +5,18 @@
 {% endblock %}
 
 {% block main %}
+    <form action="/" method ="GET" id ="form">
+        <div class="form-group">
+            <input class="form-control" name="search" placeholder="title or description" type="text"/>
+        </div>
+    </form>
      <div class="row text-center" style="display:flex; flex-wrap: wrap;">
-
         {% for i in products %}
             <div class="col-md-3 col-sm-6">
                 <div class="thumbnail">
                 <span class="aktion">{{usd(i.price)}}</span>
                    <img src="{{i.path}}">
+                   <hr>
                    <div class="caption">
                        <h4>{{ i.name }}</h4>
                    </div>

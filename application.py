@@ -77,7 +77,7 @@ def index():
 @app.route("/profile", methods=["GET", "POST"])
 @login_required
 def profile():
-        # TODO
+
     return render_template("profile.html")
 
 
@@ -281,7 +281,8 @@ def show():
     if not product_id:
         return apology("must provice product id",400)
 
-    product = db.execute("select name, description, price, product_id, user_id from product where product_id=:product_id",
+    product = db.execute("select name, description, price, product_id, user_id, username\
+                        from product join users on users.id=user_id where product_id=:product_id",
                      product_id=product_id)
 
     if not product:

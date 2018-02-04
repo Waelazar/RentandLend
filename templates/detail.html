@@ -5,22 +5,63 @@
 {% endblock %}
 
 {% block main %}
-
-          <div>{{ product["name"] }}</div>
-          <div>{{ product["description"] }}</div>
-          <div>{{ usd(product["price"]) }}</div>
-          <div class="thumbnail"><img src="{{ image_paths[0]["path"]}}"></div>
-          {% if product_owner %}
-          <a href="/edit_product?product_id={{product["product_id"]}}">edit me</a>
-          {% endif %}
-
-    <ul id="messages">
-        {% for msg in messages %}
-            <li>{{msg.text}} by {{ msg.username }} @ {{ msg.time }}</li>
-        {% endfor %}
-    </ul>
-    <input type="text" id="myMessage">
-    <button id="sendbutton">Send</button>
+<div class="container">
+    <div class="row">
+        <div class="col-md-3">
+            <p class="lead">Rent&Lend</p>
+            <div class="list-group">
+                <li class="list-group-item active">Info 1</li>
+                <li class="list-group-item">Info 2</li>
+                <li class="list-group-item">Info 3</li>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div class="thumbnail">
+                <img class="img-responsive" src="{{ image_paths[0]["path"]}}">
+                <hr>
+                <div class="caption-full">
+                    <h4 class="text-right">Price {{ usd(product["price"]) }}</h4>
+                    <h4 class="text-left"><a>{{ product["name"] }}</a></h4>
+                    <p class="text-left paragraph">{{ product["description"] }}</p>
+                    <p class="text-left">
+                        <em>Submitted By {{ product["username"] }}</em>
+                    </p>
+                    {% if product_owner %}
+                        <a class="text-left btn btn-xs btn-warning" href="/edit_product?product_id={{product["product_id"]}}">Edit</a>
+                    {% endif %}
+                </div>
+            </div>
+            <br>
+            <div class="card">
+                 {% for msg in messages %}
+                <div class="row" id="messages">
+                    <div class="col-md-6">
+                    <p class="text-left paragraph"><strong>{{ msg.username }}</strong></p>
+                    </div>
+                    <div class="col-md-6">
+                    <p class="text-right date">{{ msg.time }}</p>
+                    </div>
+                    <div class="col-md-12">
+                    <p class="text-left paragraph">
+                        {{msg.text}}
+                    </p>
+                    </div>
+                </div>
+                <hr>
+                {% endfor %}
+                <div class="row">
+                    <div class="col-md-6 text-left">
+                        <textarea type="text" id="myMessage" rows="4" cols="50"></textarea>
+                    </div>
+                    <div class="col-md-6 text-left">
+                       <button type="button" class="btn btn-success" id="sendbutton">Send</button>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.8/socket.io.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
@@ -28,7 +69,18 @@
     $(document).ready(function() {
         var socket = io.connect('http://ide50-waelazar1.cs50.io:8080');
         socket.on('message', function(msg) {
-            $("#messages").append('<li>'+msg.message+' by '+msg.username+' @ '+msg.time+'</li>');
+            $("#messages").append('<hr><div class="col-md-6 text-left">\
+                            <p class="paragraph"><strong>' + msg.username + '</strong></p>\
+                            </div>\
+                            <div class="col-md-6 text-right">\
+                            <p class="date">'+msg.time+ '</p>\
+                            </div>\
+                            <div class="col-md-12 text-left">\
+                            <p class=" paragraph">\
+                                '+ msg.message+
+                            '</p>\
+                            </div>\
+                        <hr>');
             console.log('Received message');
         });
         $('#sendbutton').on('click', function() {
