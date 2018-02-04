@@ -53,10 +53,18 @@ db = SQL("sqlite:///database.db")
 @app.route("/")
 @login_required
 def index():
+    search_term = request.args.get("search")
 
-    main_data = db.execute(" select name, description, product.product_id, price, path from product \
-    left outer join product_image i ON product.product_id = i.product_id and i.flag_main_image=1\
-    left outer join images on images.id = i.image_id" )
+    if not search_term:
+        main_data = db.execute(" select name, description, product.product_id, price, path from product \
+        left outer join product_image i ON product.product_id = i.product_id and i.flag_main_image=1\
+        left outer join images on images.id = i.image_id")
+    else:
+        main_data = db.execute(" select name, description, product.product_id, price, path from product \
+                left outer join product_image i ON product.product_id = i.product_id and i.flag_main_image=1\
+                left outer join images on images.id = i.image_id \
+                where upper(name) like upper('%' || :search_term || '%') or upper(description) like upper('%' || :search_term || '%')",
+                               search_term=search_term)
 
     for image in main_data:
         if image["path"] != None:
