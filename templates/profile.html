@@ -5,6 +5,16 @@
 {% endblock %}
 
 {% block main %}
+    <div class="row text-center" style="display:flex; flex-wrap: wrap;">
+        <div class="col-md-3 col-sm-6">
+            <div>{{ user_data.firstname }}</div>
+            <div>{{ user_data.lastname }}</div>
+            <div>{{ user_data.birthday }}</div>
+            <div>{{ user_data.city }}</div>
+            <div>{{ user_data.country }}</div>
+            <div><img src="{{ user_data.path }}"/></div>
+        </div>
+    </div>
     <a href="/edit">edit page</a>
 
 {% endblock %}
