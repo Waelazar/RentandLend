@@ -5,16 +5,24 @@
 {% endblock %}
 
 {% block main %}
-    <form action="/register" method="post">
-        <div class="form-group">
-            <input autocomplete="off" autofocus class="form-control" name="username" placeholder="Username" type="text"/>
+<div class="container">
+    <center>
+        <div class="account-wall">
+            <img class="profile-img" src="https://lh5.googleusercontent.com/-b0-k99FZlyE/AAAAAAAAAAI/AAAAAAAAAAA/eu7opA4byxI/photo.jpg?sz=120"
+                alt="">
+            <form action="/register" method="post" class="form-signin">
+                <input autocomplete="off" autofocus class="form-control" name="username" placeholder="Username" type="text" required/>
+                <input class="form-control" name="password" placeholder="Password" type="password" required/>
+                <input class="form-control" name="confirmation" placeholder="Confirm Password" type="password" required/>
+            <button class="btn btn-lg btn-primary btn-block" type="submit">
+                Sign up</button>
+            <label class="checkbox pull-left">
+                <input type="checkbox" value="terms">
+                Term and Copyrights
+            </label>
+            </form>
         </div>
-        <div class="form-group">
-            <input class="form-control" name="password" placeholder="Password" type="password"/>
-        </div>
-        <div class="form-group">
-            <input class="form-control" name="confirmation" placeholder="Confirm Password" type="password"/>
-        </div>
-        <button class="btn btn-primary" type="submit">Log In</button>
-    </form>
+        <a href="/login" class="text-center new-account">Log in</a>
+    </center>
+</div>
 {% endblock %}

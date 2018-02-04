@@ -89,7 +89,7 @@ main img
 }
 .form-signin input[type="text"]
 {
-    margin-bottom: -1px;
+    margin-bottom: 10px;
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
 }
@@ -102,11 +102,13 @@ main img
 .account-wall
 {
     margin-top: 20px;
+    margin-left: 30%;
+    margin-right: 30%;
     padding: 40px 0px 20px 0px;
     background-color: #f7f7f7;
     -moz-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
     -webkit-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
-    box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+    box-shadow: 0px 10px 40px rgba(0, 0, 0, 0.3);
 }
 
 .profile-img
@@ -127,4 +129,13 @@ main img
 {
     display: block;
     margin-top: 10px;
+}
+#map {
+    height: 400px;
+    margin-bottom: 20px;
+    border-radius: 30px;
+}
+
+.smaller {
+    width: 10%;
 }
