@@ -57,3 +57,9 @@ main img
     padding:5px 10px;
     font-size:20px;
 }
+
+#map {
+    height: 400px;
+    margin-bottom: 20px;
+    border-radius: 30px;
+}

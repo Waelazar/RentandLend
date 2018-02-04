@@ -14,11 +14,12 @@
             <input class="form-control" name="product_description" placeholder="Description" type="text" value="{{ product.description }}"/>
         </div>
         <div class="form-group">
-            <input class="form-control" name="latitude" placeholder="Latitude" type="text" value="{{ product.latitude }}"/>
+            <input class="form-control" name="latitude" id="lat" placeholder="Latitude" type="text" value="{{ product.latitude }}"/>
         </div>
         <div class="form-group">
-            <input class="form-control" name="longitude" placeholder="Longitude" type="text" value="{{ product.longitude }}"/>
+            <input class="form-control" name="longitude" id="lng" placeholder="Longitude" type="text" value="{{ product.longitude }}"/>
         </div>
+            {%  include "map.html" %}
         <div class="form-group">
             <input class="form-control" name="price" placeholder="Price" type="number" step="0.01" value="{{ product.price }}"/>
         </div>
@@ -32,11 +33,12 @@
             <input class="form-control" name="product_description" placeholder="Description" type="text" required/>
         </div>
         <div class="form-group">
-            <input class="form-control" name="latitude" placeholder="Latitude" type="text" required/>
+            <input class="form-control" name="latitude" id="lat" placeholder="Latitude" type="text" required/>
         </div>
         <div class="form-group">
-            <input class="form-control" name="longitude" placeholder="Longitude" type="text" required/>
+            <input class="form-control" name="longitude" id="lng" placeholder="Longitude" type="text" required/>
         </div>
+            {%  include "map.html" %}
         <div class="form-group">
             <input class="form-control" name="price" placeholder="Price in USD" type="number" step="0.01" required/>
         </div>
