@@ -77,8 +77,17 @@ def index():
 @app.route("/profile", methods=["GET", "POST"])
 @login_required
 def profile():
-        # TODO
-    return render_template("profile.html")
+    user = db.execute("SELECT * FROM dashboard"
+                      " left outer join images on images.id=dashboard.image_id "
+                      " WHERE user_id = :user_id ", user_id=session["user_id"])
+
+    if not user:
+        return redirect("/edit")
+
+    for image in user:
+        image["path"] = os.path.join(app.config['UPLOAD_FOLDER'], image["path"])
+
+    return render_template("profile.html", user_data=user[0])
 
 
 @app.route("/edit", methods=["GET", "POST"])
@@ -92,7 +101,9 @@ def edit():
         city = request.form.get("city")
         country = request.form.get("country")
 
-        user = db.execute("SELECT * FROM dashboard WHERE user_id = :user_id ", user_id=session["user_id"])
+        user = db.execute("SELECT * FROM dashboard"
+                          " join images on images.id=dashboard.image_id"
+                          " WHERE user_id = :user_id ", user_id=session["user_id"])
 
         file = request.files.get('image')
         image_id = save_image(file)
