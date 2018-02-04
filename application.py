@@ -294,12 +294,10 @@ def show():
                           " where product_id=:product_id",
                           product_id=product_id)
 
-    return render_template("detail.html", product = product[0], image_paths = image_paths, user_id=session["user_id"],
-                           messages=messages)
     is_own_product = session["user_id"] == product[0]["user_id"]
 
     return render_template("detail.html", product = product[0],product_owner = is_own_product, image_paths = image_paths, user_id=session["user_id"],
-                           messages=messages))
+                           messages=messages)
 
 @app.route("/logout")
 def logout():

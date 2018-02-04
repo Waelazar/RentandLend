@@ -5,14 +5,24 @@
 {% endblock %}
 
 {% block main %}
-    <form action="/login" method="post">
-        <div class="form-group">
-            <input autocomplete="off" autofocus class="form-control" name="username" placeholder="Username" type="text"/>
+<div class="container">
+    <center>
+    <div class="row">
+        <div class="col-sm-6 col-md-4 col-md-offset-4">
+            <div class="account-wall">
+                <img class="profile-img" src="https://lh5.googleusercontent.com/-b0-k99FZlyE/AAAAAAAAAAI/AAAAAAAAAAA/eu7opA4byxI/photo.jpg?sz=120"
+                    alt="">
+                <form action="/login" method="post" class="form-signin">
+                <input autocomplete="off" autofocus class="form-control" name="username" placeholder="Username" type="text" required/>
+                <input class="form-control" name="password" placeholder="Password" type="password" required/>
+                <button class="btn btn-lg btn-primary btn-block" type="submit">
+                    Log in</button>
+                <a href="#" class="pull-right need-help">terms & Copyrights </a><span class="clearfix"></span>
+                </form>
+            </div>
+            <a href="#" class="text-center new-account">Create an account </a>
         </div>
-        <div class="form-group">
-            <input class="form-control" name="password" placeholder="Password" type="password"/>
-        </div>
-        <button class="btn btn-primary" type="submit">Log In</button>
-    </form>
-    <a href="/">index page</a>
+    </div>
+    </center>
+</div>
 {% endblock %}
