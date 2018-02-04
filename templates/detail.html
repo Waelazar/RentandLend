@@ -27,7 +27,7 @@
                         <em>Submitted By {{ product["username"] }}</em>
                     </p>
                     {% if product_owner %}
-                        <a class="text-left btn btn-xs btn-warning" href="/edit_product?product_id={{product["product_id"]}}">Edit</a>
+                        <a class="text-left btn btn-xs btn-outline-warning" href="/edit_product?product_id={{product["product_id"]}}">Edit</a>
                     {% endif %}
                 </div>
             </div>
@@ -54,7 +54,7 @@
                         <textarea type="text" id="myMessage" rows="4" cols="50"></textarea>
                     </div>
                     <div class="col-md-6 text-left">
-                       <button type="button" class="btn btn-success" id="sendbutton">Send</button>
+                       <button type="button" class="btn btn-outline-success" id="sendbutton">Send</button>
                     </div>
                     </div>
                 </div>

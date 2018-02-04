@@ -6,15 +6,20 @@
 
 {% block main %}
     <div class="row text-center" style="display:flex; flex-wrap: wrap;">
-        <div class="col-md-3 col-sm-6">
-            <div>{{ user_data.firstname }}</div>
-            <div>{{ user_data.lastname }}</div>
-            <div>{{ user_data.birthday }}</div>
-            <div>{{ user_data.city }}</div>
-            <div>{{ user_data.country }}</div>
-            <div><img src="{{ user_data.path }}"/></div>
+        <div class="row">
+            <div class="col-md-3">
+                <div class="text-left"><img src="{{ user_data.path }}"/></div>
+            </div>
+            <div class="col-md-9 text-left">
+                <div><h4>Firstname: {{ user_data.firstname }}</h4></div>
+                <div><h4>Lastname:  {{ user_data.lastname }}</h4></div>
+                <div><h4>Birthday:  {{ user_data.birthday }}</h4></div>
+                <div><h4>City:      {{ user_data.city }}</h4></div>
+                <div><h4>Country:   {{ user_data.country }}</h4></div>
+            </div>
         </div>
+        <br>
+    <a class="text-left btn btn-xs btn-outline-warning" href="/edit">edit page</a>
     </div>
-    <a href="/edit">edit page</a>
 
 {% endblock %}
