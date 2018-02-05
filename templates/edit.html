@@ -5,6 +5,29 @@
 {% endblock %}
 
 {% block main %}
+        {% if user is defined  %}
+        <form action="/edit_user?user_id=6" enctype="multipart/form-data" method="post">
+        <div class="form-group">
+            <input  autocomplete="off" autofocus class="form-control" name="firstname" placeholder="Firstname" type="text" value="{{ user.firstname }}" required/>
+        </div>
+        <div class="form-group">
+            <input class="form-control" name="lastname" placeholder="Lastname" type="text" value="{{ user.lastname }}" required/>
+        </div>
+        <div class="form-group">
+            <input class="form-control" name="birthday" placeholder="Birthday" type="text" value="{{ user.birthday }}" required/>
+        </div>
+        <div class="form-group">
+            <input class="form-control" name="city" placeholder="City" type="text" value="{{ user.city }}" required/>
+        </div>
+        <div class="form-group">
+            <input class="form-control" name="country" placeholder="Country" type="text" value="{{ user.country }}" required/>
+        </div>
+        <div class="form-group">
+            <input class="form-control" name="image" id ="image" placeholder="image" type="file" required/>
+        </div>
+        <button class="btn btn-primary" type="submit">Submit</button>
+        </form>
+        {% else %}
 
     <form action="/edit" enctype="multipart/form-data" method="post">
         <div class="form-group">
@@ -20,12 +43,13 @@
             <input class="form-control" name="city" placeholder="City" type="text" required/>
         </div>
         <div class="form-group">
-            <input class="form-control" name="country" placeholder="Country" type="text"/>
+            <input class="form-control" name="country" placeholder="Country" type="text" required/>
         </div>
         <div class="form-group">
             <input class="form-control" name="image" id ="image" placeholder="image" type="file" required/>
         </div>
 
         <button class="btn btn-primary" type="submit">Submit</button>
+        {% endif %}
     </form>
 {% endblock %}

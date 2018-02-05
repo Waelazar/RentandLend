@@ -115,17 +115,51 @@ def edit():
                     VALUES(:firstname, :lastname, :birthday, :city, :country, :user_id, :image_id)",
                     firstname = firstname, lastname = lastname, birthday = birthday,
                     city= city, country = country, user_id=session["user_id"], image_id = image_id)
+
         else :
 
             db.execute("UPDATE dashboard SET firstname = :firstname, lastname = :lastname, birthday = :birthday, \
-                        city = :city, country = :country , user_id= :user_id, image_id = :image_id",
-                        firstname = firstname, lastname = lastname, birthday = birthday,
-                        city= city, country = country, user_id=session["user_id"], image_id = image_id)
+                    city = :city, country = :country , user_id= :user_id, image_id = :image_id",
+                    firstname = firstname, lastname = lastname, birthday = birthday,
+                    city= city, country = country, user_id=session["user_id"], image_id = image_id)
 
 
         return redirect("/profile")
     else:
         return render_template("edit.html")
+
+
+@app.route("/edit_user", methods=["GET","POST"])
+@login_required
+def edit_user():
+    _id = request.args.get("user_id")
+    if not _id:
+        return apology("must provice user id", 400)
+
+    if request.method == "GET":
+        user = db.execute("select * from dashboard where user_id=:user_id",
+                         user_id=_id)
+        if not user:
+            return apology("user does not exist", 404)
+
+        return render_template("edit.html", user=user[0])
+    else:
+        if not request.form.get("firstname") or not request.form.get("lastname") or not request.form.get("birthday") or not request.form.get("city") or not request.form.get("country"):
+            return apology("Missing required field", 400)
+
+        result = db.execute("update dashboard set firstname=:firstname, lastname=:lastname, birthday=:birthday, city=:city,"
+                            " country=:country where user_id=:user_id",
+                            firstname=request.form.get("firstname"),
+                            lastname=request.form.get("lastname") or "null",
+                            birthday=request.form.get("birthday"),
+                            city=request.form.get("city"),
+                            country=request.form.get("country"),
+                            user_id=_id)
+        if not result:
+            return apology("Could not save product",400)
+
+        return redirect("/profile")
+
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -208,6 +242,7 @@ def register():
 @app.route("/add", methods=["GET", "POST"])
 @login_required
 def add():
+
     if request.method == "POST":
         if not request.form.get("product_name") or not request.form.get("latitude") or not request.form.get("longitude")\
                 or not request.form.get("price") or not request.files.get('image'):
