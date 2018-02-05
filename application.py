@@ -147,14 +147,23 @@ def edit_user():
         if not request.form.get("firstname") or not request.form.get("lastname") or not request.form.get("birthday") or not request.form.get("city") or not request.form.get("country"):
             return apology("Missing required field", 400)
 
+        image_user = db.execute("SELECT * FROM dashboard"
+                          " join images on images.id=dashboard.image_id"
+                          " WHERE user_id = :user_id ", user_id=session["user_id"])
+
+        file = request.files.get('image_edit')
+        image_id = save_image(file)
+
         result = db.execute("update dashboard set firstname=:firstname, lastname=:lastname, birthday=:birthday, city=:city,"
-                            " country=:country where user_id=:user_id",
+                            " country=:country, image_id = :image_id where user_id=:user_id",
                             firstname=request.form.get("firstname"),
                             lastname=request.form.get("lastname") or "null",
                             birthday=request.form.get("birthday"),
                             city=request.form.get("city"),
                             country=request.form.get("country"),
+                            image_id = image_id,
                             user_id=_id)
+
         if not result:
             return apology("Could not save product",400)
 
