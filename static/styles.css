@@ -99,9 +99,14 @@ main img
     border-top-left-radius: 0;
     border-top-right-radius: 0;
 }
+
+.view-height {
+    position: relative;
+    text-align: center;
+    padding-top: 20vh;
+}
 .account-wall
 {
-    margin-top: 20px;
     margin-left: 30%;
     margin-right: 30%;
     padding: 40px 0px 20px 0px;
@@ -179,6 +184,7 @@ main img
 }
 paragraph1 {
     margin-top: 10px;
+    margin-left: 10px;
     margin-right: 10px;
     text-align: justify !important;
 }
