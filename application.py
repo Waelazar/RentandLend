@@ -216,6 +216,7 @@ def register():
         username = request.form.get("username")
         password = request.form.get("password")
         confirmation = request.form.get("confirmation")
+        email = request.form.get("email")
 
         # Ensure username was submitted
         if not username:

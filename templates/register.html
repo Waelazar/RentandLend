@@ -7,13 +7,12 @@
 {% block main %}
 <div class="container view-height">
     <div class="account-wall">
-        <img class="profile-img" src="https://lh5.googleusercontent.com/-b0-k99FZlyE/AAAAAAAAAAI/AAAAAAAAAAA/eu7opA4byxI/photo.jpg?sz=120"
-            alt="">
+
         <form action="/register" method="post" class="form-signin">
             <input autocomplete="off" autofocus class="form-control" name="username" placeholder="Username" type="text" required/>
             <input class="form-control" name="password" placeholder="Password" type="password" required/>
             <input class="form-control" name="confirmation" placeholder="Confirm Password" type="password" required/>
-        <button class="btn btn-lg btn-primary btn-block" type="submit">
+        <button class="btn btn-lg btn-outline-success btn-block" type="submit">
             Sign up</button>
         <label class="checkbox pull-left" required>
             <input type="checkbox" value="terms">

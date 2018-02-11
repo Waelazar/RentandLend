@@ -1,9 +1,25 @@
+@import url('https://fonts.googleapis.com/css?family=Nanum+Myeongjo');
+
+body{
+    font-family: 'Nanum Myeongjo', serif;
+}
+
 nav .navbar-brand
 {
     /* size for brand */
-    font-size: xx-large;
+    font-size: 24px;
+  font-weight: bold;
+  color: #fff !important;
+  font-style: italic;
 }
-
+nav .navbar-brand:hover
+{
+    /* size for brand */
+    font-size: 24px;
+  font-weight: bold;
+  color: blue !important;
+  font-style: italic;
+}
 /* colors for brand */
 nav .navbar-brand .blue
 {
@@ -57,7 +73,35 @@ main img
     padding:5px 10px;
     font-size:20px;
 }
+/* ####################### INDEX ###########################*/
+header {
+  background: url(https://images.unsplash.com/photo-1423768164017-3f27c066407f?ixlib=rb-0.3.5&s=74f4dfa59701fca88872d9e2e3a5c293&auto=format&fit=crop&w=1950&q=80);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment:fixed;
+  background-position: center;
+  z-index: 0;
+  width: 100%;
+  height: 976px;
+  background-color: #060;
+  color: #fff;
+  text-align: center;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, .5);
+}
+nav{
+  overflow: hidden;
+  position: fixed !important;
+  top: 0;
+  width: 100%;
 
+}
+
+
+.inner {
+  padding: 30px;
+}
+
+/*########################################################*/
 /* ######################## LOGIN ######################## */
 .form-signin
 {
@@ -103,19 +147,46 @@ main img
 .view-height {
     position: relative;
     text-align: center;
-    padding-top: 20vh;
+
 }
 .account-wall
 {
     margin-left: 30%;
     margin-right: 30%;
     padding: 40px 0px 20px 0px;
-    background-color: #f7f7f7;
+    background-color: rgba(255,255,255,0);
     -moz-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
     -webkit-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
     box-shadow: 0px 10px 40px rgba(0, 0, 0, 0.3);
 }
+.btn-outline-success{
+  color: #fff !important;
+  background-color: #3D9325 !important;
 
+}
+
+.btn-outline-success:hover{
+  color: #3D9325 !important;
+  background-color: #fff !important;
+
+}
+/* ######################## ICON #######################*/
+#search {
+    width: 130px;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    background-color: white;
+    margin-left :20px;
+    -webkit-transition: width 0.4s ease-in-out;
+    transition: width 0.4s ease-in-out;
+}
+
+#search:focus {
+    width: 50%;
+}
+/* #############################################*/
 .profile-img
 {
     width: 96px;
@@ -148,7 +219,9 @@ main img
 .thumbnail img {
     height: 220px;
     width: 240px;
-
+    border-top-left-radius: 10%;
+    border-top-right-radius: 10%;
+    margin-bottom:15px;
 }
 
 .thumbnail {
@@ -195,4 +268,8 @@ paragraph1 {
     height: 40px;
     border: solid 1px green;
     border-radius: 5px;
+}
+
+.col-sm-6 {
+    margin-bottom : 15px;
 }
