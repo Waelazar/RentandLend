@@ -229,8 +229,8 @@ def register():
             return apology("must confirm password", 400)
 
         # Insert username and hashed password into the db
-        result = db.execute("INSERT INTO users (username, hash) VALUES(:username, :hash)",
-                            username=request.form.get("username"), hash=generate_password_hash(password))
+        result = db.execute("INSERT INTO users (username, password_hash) VALUES(:username, :password_hash)",
+                            username=request.form.get("username"), password_hash=generate_password_hash(password))
         # Check if the username is already exist in the db
         if not result:
             return apology("username already exist", 400)

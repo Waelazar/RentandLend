@@ -1,25 +1,73 @@
-{% extends "layout.html" %}
+<!DOCTYPE html>
 
-{% block title %}
-    Profile Page
-{% endblock %}
+<html lang="en">
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
 
-{% block main %}
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" rel="stylesheet"/>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link href="/static/profile.css" rel="stylesheet"/>
+        <title>Profile</title>
+    </head>
 
-    <div class="row text-center" style="display:flex; flex-wrap: wrap;">
-        <div class="row">
-            <div class="col-md-3">
-                <div class="text-left"><img class="img-fluid" src="{{ user_data.path }}"/></div>
-            </div>
-            <div class="col-md-9 text-left">
-                <div><h4>Firstname: {{ user_data.firstname }}</h4></div>
-                <div><h4>Lastname:  {{ user_data.lastname }}</h4></div>
-                <div><h4>Birthday:  {{ user_data.birthday }}</h4></div>
-                <div><h4>City:      {{ user_data.city }}</h4></div>
-                <div><h4>Country:   {{ user_data.country }}</h4></div>
+    <body>
+        <header id="top">
+            <nav class="navbar navbar-expand-md navbar-light">
+                <a class="navbar-brand" href="/">Rent&Lend</a>
+                <button aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-target="#navbar" data-toggle="collapse" type="button">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbar">
+                    {% if session.user_id %}
+                        <ul class="navbar-nav mr-auto mt-2">
+                            <li class="nav-item"><a class="nav-link text-white" href="/profile">Profile</a></li>
+                            <li class="nav-item"><a class="nav-link text-white" href="/add">Add</a></li>
+                        </ul>
+                        <ul class="navbar-nav ml-auto mt-2">
+                            <li class="nav-item"><a class="nav-link text-white" href="/logout"><i class="fa fa-sign-out"></i> Log Out</a></li>
+                        </ul>
+                    {% else %}
+                        <ul class="navbar-nav ml-auto mt-2">
+                            <li class="nav-item"><a class="nav-link text-white" href="/register"> <i class="fa fa-user-plus"></i> Register</a></li>
+                            <li class="nav-item"><a class="nav-link text-white" href="/login"><i class="fa fa-sign-in"></i> Log In</a></li>
+                        </ul>
+                    {% endif %}
+                </div>
+            </nav>
+        </header>
+        <main>
+
+        <div class="container view-height">
+            <div class="account-wall">
+                <div><img class="img-fluid rounded-circle" src="{{ user_data.path }}"/></div>
+                    <hr>
+                    <table>
+                        <tr>
+                            <td>Firstname:</td>
+                            <td>{{ user_data.firstname }}</td>
+                        </tr>
+                        <tr>
+                            <td>Lastname:</td>
+                            <td>{{ user_data.lastname }}</td>
+                        </tr>
+                        <tr>
+                            <td>Birthday:</td>
+                            <td>{{ user_data.birthday }}</td>
+                        </tr>
+                        <tr>
+                            <td>City:</td>
+                            <td>{{ user_data.city }}</td>
+                        </tr>
+                        <tr>
+                            <td>Country:</td>
+                            <td>{{ user_data.country }}</td>
+                        </tr>
+                    </table>
+                    <a href="/edit_user?user_id={{user_data.user_id}}" class="btn btn-lg edit">Edit Profile</a>
             </div>
         </div>
-        <br>
-    <a class="text-left btn btn-xs btn-outline-warning" href="/edit_user?user_id={{user_data.user_id}}">edit page</a>
-    </div>
-{% endblock %}
+        </main>
+    </body>
+</html>
