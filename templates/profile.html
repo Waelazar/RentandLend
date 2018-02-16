@@ -5,10 +5,11 @@
 {% endblock %}
 
 {% block main %}
+
     <div class="row text-center" style="display:flex; flex-wrap: wrap;">
         <div class="row">
             <div class="col-md-3">
-                <div class="text-left"><img src="{{ user_data.path }}"/></div>
+                <div class="text-left"><img class="img-fluid" src="{{ user_data.path }}"/></div>
             </div>
             <div class="col-md-9 text-left">
                 <div><h4>Firstname: {{ user_data.firstname }}</h4></div>
@@ -21,5 +22,4 @@
         <br>
     <a class="text-left btn btn-xs btn-outline-warning" href="/edit_user?user_id={{user_data.user_id}}">edit page</a>
     </div>
-
 {% endblock %}

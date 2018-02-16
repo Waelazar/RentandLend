@@ -51,7 +51,6 @@ db = SQL("sqlite:///database.db")
 
 
 @app.route("/")
-@login_required
 def index():
     search_term = request.args.get("search")
 
@@ -216,7 +215,6 @@ def register():
         username = request.form.get("username")
         password = request.form.get("password")
         confirmation = request.form.get("confirmation")
-        email = request.form.get("email")
 
         # Ensure username was submitted
         if not username:
@@ -230,10 +228,10 @@ def register():
         if not confirmation or confirmation != password:
             return apology("must confirm password", 400)
 
-        # insert username and hashed password into the db
-        result = db.execute("INSERT INTO users (username, password_hash) VALUES(:username, :hash)",
+        # Insert username and hashed password into the db
+        result = db.execute("INSERT INTO users (username, hash) VALUES(:username, :hash)",
                             username=request.form.get("username"), hash=generate_password_hash(password))
-        # check if the username is already exist in the db
+        # Check if the username is already exist in the db
         if not result:
             return apology("username already exist", 400)
 
@@ -332,7 +330,6 @@ def edit_product():
 
 
 @app.route("/show", methods=["GET"])
-@login_required
 def show():
     product_id = request.args.get("product_id")
     if not product_id:

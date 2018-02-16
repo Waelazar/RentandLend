@@ -16,30 +16,15 @@ nav .navbar-brand
 {
     /* size for brand */
     font-size: 24px;
-  font-weight: bold;
-  color: #fff !important;
-  font-style: italic;
+    font-weight: bold;
+    color: #fff !important;
+    font-style: italic;
+    transition: 1s;
+    text-decoration: none;
 }
 nav .navbar-brand:hover
 {
   letter-spacing: 5px;
-}
-/* colors for brand */
-nav .navbar-brand .blue
-{
-    color: #537fbe;
-}
-nav .navbar-brand .red
-{
-    color: #ea433b;
-}
-nav .navbar-brand .yellow
-{
-    color: #f5b82e;
-}
-nav .navbar-brand .green
-{
-    color: #2e944b;
 }
 
 main .form-control
@@ -66,6 +51,49 @@ main img
     max-width: 100%;
 }
 
+header {
+  background: url(https://images.unsplash.com/photo-1505139229755-18651479b8be?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=4777bfa408df1f69d84aac84b8999fa4&auto=format&fit=crop&w=750&q=80);
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment:fixed;
+  background-position: center;
+  z-index: 0;
+  /* Set rules to fill background */
+  min-height: 100%;
+  min-width: 1024px;
+    /* Set up proportionate scaling */
+  width: 100%;
+  height: auto;
+    /* Set up positioning */
+  position: fixed;
+  top: 0;
+  left: 0;
+  text-align: center;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, .5);
+}
+nav{
+  overflow: hidden;
+  position: fixed !important;
+  top: 0;
+  width: 100%;
+
+}
+/* ########### animation navbar icon ################*/
+
+.nav-item{
+    border-bottom: 1px solid rgba(0, 0, 0, 0);
+    -webkit-transition: border 500ms ease;
+  -moz-transition: border 500ms ease;
+  -ms-transition: border 500ms ease;
+  -o-transition: border 500ms ease;
+  transition: border 500ms ease;
+}
+.nav-item:hover {
+    border-bottom: 1px solid rgba(255, 255, 255, 1);;
+}
 /* ######################## LOGIN ######################## */
 .form-signin
 {
@@ -76,10 +104,6 @@ main img
 .form-signin .form-signin-heading, .form-signin .checkbox
 {
     margin-bottom: 10px;
-}
-.form-signin .checkbox
-{
-    font-weight: normal;
 }
 .form-signin .form-control
 {
@@ -111,8 +135,7 @@ main img
 .view-height {
     position: relative;
     text-align: center;
-    padding-top:10vh;
-
+    padding-top:30vh;
 }
 .account-wall
 {
@@ -124,27 +147,16 @@ main img
     -webkit-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
     box-shadow: 0px 10px 40px rgba(0, 0, 0, 0.3);
 }
-.btn-outline-success{
-  color: #fff !important;
-  background-color: #3D9325 !important;
-
+.register {
+    background-color:rgba(0, 20 , 20, 0.8);
+    color:#fff;
+    transition: 1s ease;
 }
 
-.btn-outline-success:hover{
-  color: #3D9325 !important;
-  background-color: #fff !important;
-
-}
-
-.profile-img
-{
-    width: 96px;
-    height: 96px;
-    margin: 0 auto 10px;
-    display: block;
-    -moz-border-radius: 50%;
-    -webkit-border-radius: 50%;
-    border-radius: 50%;
+.register:hover{
+    color:#000 !important;
+    background-color:rgba(255, 255 , 255, 0.8);
+    letter-spacing: 5px;
 }
 
 .new-account
@@ -152,76 +164,7 @@ main img
     display: block;
     margin-top: 10px;
 }
-#map {
-    height: 400px;
-    margin-bottom: 20px;
-    border-radius: 30px;
-}
 
-.smaller {
-        width: 65px;
-}
-
-/* ########### animation ################*/
-
-.col-md-9 .thumbnail {
-    padding: 0px;
-    border: solid 1px #ccc;
-    border-radius: 2%;
-}
-
-.col-md-9 .thumbnail img{
-    height: 500px;
-    width: 500px;
-}
-
-.paragraph{
-    margin-top: 10px;
-    margin-left: 10px;
-    margin-right: 10px;
-    text-align: justify !important;
-}
-.date {
-    margin-top: 10px;
-    margin-right: 10px;
-}
-paragraph1 {
-    margin-top: 10px;
-    margin-left: 10px;
-    margin-right: 10px;
-    text-align: justify !important;
-}
-#myMessage{
-    margin-left: 10px;
-    margin-top: 0px;
-    margin-bottom: 0px;
-    height: 40px;
-    border: solid 1px green;
-    border-radius: 5px;
-}
-
-.col-sm-6 {
-    margin-bottom : 15px;
-}
-a {
-    transition: 1s;
-    text-decoration: none;
-    color:rgba(0, 20 , 20, 0.8);
-}
-a:hover{
-    color:rgba(0, 20 , 20, 0.8);
-}
-.nav-item{
-    border-bottom: 1px solid rgba(0, 0, 0, 0);
-    -webkit-transition: border 500ms ease;
-  -moz-transition: border 500ms ease;
-  -ms-transition: border 500ms ease;
-  -o-transition: border 500ms ease;
-  transition: border 500ms ease;
-}
-.nav-item:hover {
-    border-bottom: 1px solid rgba(255, 255, 255, 1);;
-}
 /*########## FOOTER #####################*/
 #footer
 {
