@@ -42,9 +42,9 @@ app.config["SESSION_FILE_DIR"] = mkdtemp()
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 app.config['UPLOAD_FOLDER'] = "static/images"
-ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
-
 Session(app)
+
+ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 
 
 db = SQL("sqlite:///database.db")
@@ -131,15 +131,19 @@ def edit():
 @app.route("/edit_user", methods=["GET","POST"])
 @login_required
 def edit_user():
+
     _id = request.args.get("user_id")
     if not _id:
         return apology("must provice user id", 400)
 
     if request.method == "GET":
-        user = db.execute("select * from dashboard where user_id=:user_id",
-                         user_id=_id)
+        user = db.execute("select * from dashboard"
+                          " join images on images.id=dashboard.image_id"
+                          " WHERE user_id = :user_id ", user_id=session["user_id"])
         if not user:
             return apology("user does not exist", 404)
+        for image in user:
+            image["path"] = os.path.join(app.config['UPLOAD_FOLDER'], image["path"])
 
         return render_template("edit.html", user=user[0])
     else:
@@ -151,18 +155,26 @@ def edit_user():
                           " WHERE user_id = :user_id ", user_id=session["user_id"])
 
         file = request.files.get('image_edit')
-        image_id = save_image(file)
-
-        result = db.execute("update dashboard set firstname=:firstname, lastname=:lastname, birthday=:birthday, city=:city,"
-                            " country=:country, image_id = :image_id where user_id=:user_id",
-                            firstname=request.form.get("firstname"),
-                            lastname=request.form.get("lastname") or "null",
-                            birthday=request.form.get("birthday"),
-                            city=request.form.get("city"),
-                            country=request.form.get("country"),
-                            image_id = image_id,
-                            user_id=_id)
-
+        if file :
+            image_id = save_image(file)
+            result = db.execute("update dashboard set firstname=:firstname, lastname=:lastname, birthday=:birthday, city=:city,"
+                                " country=:country, image_id = :image_id where user_id=:user_id",
+                                firstname=request.form.get("firstname"),
+                                lastname=request.form.get("lastname") or "null",
+                                birthday=request.form.get("birthday"),
+                                city=request.form.get("city"),
+                                country=request.form.get("country"),
+                                image_id = image_id,
+                                user_id=_id)
+        else :
+            result = db.execute("update dashboard set firstname=:firstname, lastname=:lastname, birthday=:birthday, city=:city,"
+                                " country=:country where user_id=:user_id",
+                                firstname=request.form.get("firstname"),
+                                lastname=request.form.get("lastname") or "null",
+                                birthday=request.form.get("birthday"),
+                                city=request.form.get("city"),
+                                country=request.form.get("country"),
+                                user_id=_id)
         if not result:
             return apology("Could not save product",400)
 
@@ -329,15 +341,15 @@ def edit_product():
         return redirect("/")
 
 
-@app.route("/show", methods=["GET"])
+@app.route("/show", methods=["GET", "POST"])
 def show():
     product_id = request.args.get("product_id")
     if not product_id:
         return apology("must provice product id",400)
 
-    product = db.execute("select name, description, price, product_id, user_id, username\
+    product = db.execute("select name, description, price, product_id, latitude, longitude, user_id, username\
                         from product join users on users.id=user_id where product_id=:product_id",
-                     product_id=product_id)
+                        product_id=product_id)
 
     if not product:
         return apology("Product does not exist", 404)

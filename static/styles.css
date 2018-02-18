@@ -222,24 +222,17 @@ a:hover{
 .nav-item:hover {
     border-bottom: 1px solid rgba(255, 255, 255, 1);;
 }
-/*########## FOOTER #####################*/
-#footer
-{
-    text-align:center;
-    position:relative;
-    bottom:0;
-    left:0;
-    color:#fff;
+
+/*######################## EDIT PAGE ########################*/
+.btn_edit{
+  border: 2px solid gray;
+  color: gray;
+  background-color: white;
+  padding: 8px 20px;
+  border-radius: 8px;
+  font-size: 20px;
+  font-weight: bold;
+
 }
 
-.footer
-{
-    background-color:rgba(0, 20 , 20, 0.8);
-    position: fixed;
-    bottom: 0px;
-    left:0;
-    width:100%;
-    height:25px;
-}
-
-/*########## FOOTER #####################*/
+/*######################## EDIT PAGE ########################*/

@@ -1,0 +1,198 @@
+@import url('https://fonts.googleapis.com/css?family=Nanum+Myeongjo');
+
+body{
+    font-family: 'Nanum Myeongjo', serif;
+}
+ .navbar-expand-md{
+    z-index:5;
+    background-color:rgba(0, 20 , 20, 0.8);
+}
+
+.header .navbar-expand-md{
+    z-index:5;
+    background-color:rgba(0, 20 , 20, 0.8);
+}
+nav .navbar-brand
+{
+    /* size for brand */
+    font-size: 24px;
+  font-weight: bold;
+  color: #fff !important;
+  font-style: italic;
+}
+nav .navbar-brand:hover
+{
+  letter-spacing: 5px;
+}
+
+main
+{
+    /* scroll horizontally as needed */
+    overflow-x: auto;
+
+    /* center contents */
+    text-align: center;
+}
+
+/*#####################################*/
+header {
+  background: url(https://images.unsplash.com/photo-1490237014491-822aee911b99?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=c6c99dec73e55acf9dbf720ec37f6b0a&auto=format&fit=crop&w=1350&q=80);
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment:fixed;
+  background-position: center;
+  z-index: -1;
+  /* Set rules to fill background */
+  min-height: 100%;
+  min-width: 1024px;
+    /* Set up proportionate scaling */
+  width: 100%;
+  height:100%;
+    /* Set up positioning */
+  position: fixed;
+  top: 0;
+  left: 0;
+  text-align: center;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, .5);
+}
+nav{
+  overflow: hidden;
+  position: fixed !important;
+  top: 0;
+  width: 100%;
+
+}
+
+.nav-item{
+    border-bottom: 1px solid rgba(0, 0, 0, 0);
+    -webkit-transition: border 500ms ease;
+  -moz-transition: border 500ms ease;
+  -ms-transition: border 500ms ease;
+  -o-transition: border 500ms ease;
+  transition: border 500ms ease;
+}
+.nav-item:hover {
+    border-bottom: 1px solid rgba(255, 255, 255, 1);;
+}
+/*#####################################*/
+.view-height {
+    position: relative;
+    text-align: center;
+    padding-top:10vh;
+}
+
+
+
+.new-account
+{
+    display: block;
+    margin-top: 10px;
+}
+#map {
+    width:100%;
+    height: 400px;
+    margin-bottom: 20px;
+    border-radius: 30px;
+}
+
+.smaller {
+        width: 65px;
+}
+button{
+    cursor: pointer;
+}
+/* ########### animation ################*/
+
+main img{
+    height: 400px !important;
+    margin-bottom: 20px;
+    border-radius: 30px;
+    object-fit: cover;
+}
+
+.paragraph{
+    margin-top: 10px;
+    margin-left: 10px;
+    margin-right: 10px;
+    text-align: justify !important;
+}
+.date {
+    margin-top: 10px;
+    margin-right: 10px;
+}
+.paragraph1 {
+    margin-top: 10px;
+    margin-left: 10px;
+    margin-right: 10px;
+    text-align: justify;
+    color:#fff;
+}
+#myMessage{
+    margin-left: 10px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    height: 40px;
+    border: solid 1px green;
+    border-radius: 5px;
+}
+
+.col-sm-5 {
+    margin-bottom : 15px;
+}
+a {
+    transition: 1s;
+    text-decoration: none;
+    color:rgba(0, 20 , 20, 0.8);
+}
+a:hover{
+    color:rgba(0, 20 , 20, 0.8);
+}
+.nav-item{
+    border-bottom: 1px solid rgba(0, 0, 0, 0);
+    -webkit-transition: border 500ms ease;
+  -moz-transition: border 500ms ease;
+  -ms-transition: border 500ms ease;
+  -o-transition: border 500ms ease;
+  transition: border 500ms ease;
+}
+.nav-item:hover {
+    border-bottom: 1px solid rgba(255, 255, 255, 1);;
+}
+
+/*############ TABS #################*/
+
+.tabs{
+    display: flex;
+}
+
+#tabs-1 img{
+    width: 100%;
+    height: 400px;
+    margin-bottom: 20px;
+    border-radius: 30px;
+}
+
+.price{
+    margin-left:140px;
+    color:#fff;
+}
+
+.edit{
+    background-color:rgba(0, 20 , 20, 0.8);
+    color:#fff;
+    -webkit-transition: 1.2s;
+    transition: 1.2s;
+    width: 100%;
+    font-weight: 800;
+    font-style: italic;
+}
+.edit:hover{
+    background-color:rgba(0, 20 , 20, 0);
+}
+a{
+    color:#fff;
+}
+/*############ TABS #################*/
