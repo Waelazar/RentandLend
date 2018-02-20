@@ -138,8 +138,8 @@ table {
 .edit{
     background-color:rgb(255, 255 , 255);
     color:rgb(0, 20 , 20);
-    -webkit-transition: 1.2s;
-    transition: 1.2s;
+    -webkit-transition: 0.7s;
+    transition: 0.7s;
     width: 68%;
     font-weight: 800;
 }

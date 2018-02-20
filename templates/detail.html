@@ -20,7 +20,7 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbar">
-                    {% if session.user_id %}
+                    {% if user_id is not none %}
                         <ul class="navbar-nav mr-auto mt-2">
                             <li class="nav-item"><a class="nav-link text-white" href="/profile">Profile</a></li>
                             <li class="nav-item"><a class="nav-link text-white" href="/add">Add</a></li>
@@ -37,7 +37,8 @@
                 </div>
             </nav>
         </header>
-        <div class="container view-height">
+
+        <div class="container">
             <div class="row account-wall">
                 <div class="col-md-6">
                     <div id="tabs">
@@ -52,46 +53,51 @@
                             <div id="map"></div>
                         </div>
                     </div>
-                </div>
-                <div class="col-md-6">
                     <div class="caption-full">
-                        <h2 class="text-white">{{ product["name"] }}</h2>
-                        <h3 class="owner"><em>Submitted By {{ product["username"] }}</em><span class="price">Price {{ usd(product["price"]) }}</span></h3>
+                        <h2>{{ product["name"] }}</h2>
+                        <h3 class="owner"><em>Lender: {{ product["username"] }}</em><span class="price float-right">Price {{ usd(product["price"]) }}</span></h3>
                         <p class="paragraph1">{{ product["description"] }}</p>
                         {% if product_owner %}
-                            <button class="btn btn-lg edit" ><a href="/edit_product?product_id={{product["product_id"]}}">Edit product</a></button>
-                        {% else %}
-                        <h1>Hello</h1>
+                            <a class="btn btn-lg edit" href="/edit_product?product_id={{product["product_id"]}}">Edit product</a>
                         {% endif %}
                     </div>
                 </div>
-            <br>
-            <div class="card">
-                <div class="row" id="messages">
-                 {% for msg in messages %}
-                    <div class="col-md-6">
-                    <p class="text-left paragraph"><strong>{{ msg.username }}</strong></p>
+
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="row" id="messages">
+                         {% for msg in messages %}
+                            <div class="col-md-6">
+                            <p class="text-left paragraph"><strong>{{ msg.username }}</strong></p>
+                            </div>
+                            <div class="col-md-6">
+                            <p class="text-right date">{{ msg.time }}</p>
+                            </div>
+                            <div class="col-md-12">
+                            <p class="text-left paragraph">
+                                {{msg.text}}
+                            </p>
+                        </div>
+                        {% endfor %}
+                        </div>
+                        {% if user_id is not none %}
+                        <div class="row textarea">
+                            <div class="col-md-10 text-left">
+                                <input type="text" id="myMessage" placeholder="You have to login to be able to send messages"/>
+                            </div>
+                            <div class="col-md-2">
+                               <button type="button" class="btn edit" id="sendbutton">Send</button>
+                            </div>
+                        </div>
+                        {% else %}
+                        <div class="col-md-12 loginRequierd">
+                            <p class="loginRequierdText">Login required for the ability to send messages</p>
+                        </div>
+                        {% endif %}
                     </div>
-                    <div class="col-md-6">
-                    <p class="text-right date">{{ msg.time }}</p>
-                    </div>
-                    <div class="col-md-12">
-                    <p class="text-left paragraph">
-                        {{msg.text}}
-                    </p>
-                    <hr>
                 </div>
-                {% endfor %}
-                </div>
-                <div class="row">
-                    <div class="col-md-10 text-left">
-                        <textarea autofocus type="text" id="myMessage" rows="3" cols="90"></textarea>
-                    </div>
-                    <div class="col-md-2 text-center">
-                       <button type="button" class="btn btn-outline-success" id="sendbutton">Send</button>
-                    </div>
-                </div>
-            </div>
+
+
         </div>
     </div>
 </div>
@@ -116,7 +122,7 @@
             })
             function initMap() {
                 window.map = new google.maps.Map(document.getElementById('map'), {
-                    zoom: 18,
+                    zoom: 15,
                     center: mapCenter
                 });
                 var marker = new google.maps.Marker({

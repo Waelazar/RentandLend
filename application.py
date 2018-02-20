@@ -369,9 +369,15 @@ def show():
                           " where product_id=:product_id",
                           product_id=product_id)
 
-    is_own_product = session["user_id"] == product[0]["user_id"]
 
-    return render_template("detail.html", product = product[0],product_owner = is_own_product, image_paths = image_paths, user_id=session["user_id"],
+    is_own_product = None
+    if not session.get("user_id") is None:
+        is_own_product = session["user_id"] == product[0]["user_id"]
+    user_id = None
+    if not session.get("user_id") is None:
+        user_id = session["user_id"]
+
+    return render_template("detail.html", product = product[0],product_owner = is_own_product, image_paths = image_paths, user_id=user_id,
                            messages=messages)
 
 @app.route("/logout")

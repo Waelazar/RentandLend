@@ -150,7 +150,8 @@ nav{
 .register {
     background-color:rgba(0, 20 , 20, 0.8);
     color:#fff;
-    transition: 1s ease;
+    -webkit-transition: 0.7s;
+    transition: 0.7s;
 }
 
 .register:hover{

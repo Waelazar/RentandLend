@@ -1,9 +1,19 @@
 @import url('https://fonts.googleapis.com/css?family=Nanum+Myeongjo');
 
 body{
-    font-family: 'Nanum Myeongjo', serif;
+  font-family: 'Nanum Myeongjo', serif;
+  background: url(https://images.unsplash.com/photo-1501244686579-97d04b498199?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=a062c594b8de4f10e0cce5133df5f1fa&auto=format&fit=crop&w=1350&q=80);
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment:fixed;
+  background-position: center;
+
 }
- .navbar-expand-md{
+
+.navbar-expand-md{
     z-index:5;
     background-color:rgba(0, 20 , 20, 0.8);
 }
@@ -16,9 +26,11 @@ nav .navbar-brand
 {
     /* size for brand */
     font-size: 24px;
-  font-weight: bold;
-  color: #fff !important;
-  font-style: italic;
+    font-weight: bold;
+    color: #fff !important;
+    font-style: italic;
+    transition: 1s;
+    text-decoration: none;
 }
 nav .navbar-brand:hover
 {
@@ -35,35 +47,19 @@ main
 }
 
 /*#####################################*/
-header {
-  background: url(https://images.unsplash.com/photo-1490237014491-822aee911b99?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=c6c99dec73e55acf9dbf720ec37f6b0a&auto=format&fit=crop&w=1350&q=80);
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-attachment:fixed;
-  background-position: center;
+#top {
   z-index: -1;
-  /* Set rules to fill background */
+   /*Set rules to fill background*/
   min-height: 100%;
   min-width: 1024px;
-    /* Set up proportionate scaling */
+     /*Set up proportionate scaling*/
   width: 100%;
   height:100%;
-    /* Set up positioning */
-  position: fixed;
+     /*Set up positioning*/
   top: 0;
   left: 0;
   text-align: center;
   text-shadow: 0 1px 3px rgba(0, 0, 0, .5);
-}
-nav{
-  overflow: hidden;
-  position: fixed !important;
-  top: 0;
-  width: 100%;
-
 }
 
 .nav-item{
@@ -81,11 +77,14 @@ nav{
 .view-height {
     position: relative;
     text-align: center;
-    padding-top:10vh;
+    margin: auto;
+    padding-top: 1%;
 }
 
 
-
+.caption-full{
+    margin-top: 35px;
+}
 .new-account
 {
     display: block;
@@ -94,15 +93,11 @@ nav{
 #map {
     width:100%;
     height: 400px;
-    margin-bottom: 20px;
-    border-radius: 30px;
+    border-radius: 20px;
 }
 
 .smaller {
         width: 65px;
-}
-button{
-    cursor: pointer;
 }
 /* ########### animation ################*/
 
@@ -113,19 +108,9 @@ main img{
     object-fit: cover;
 }
 
-.paragraph{
-    margin-top: 10px;
-    margin-left: 10px;
-    margin-right: 10px;
-    text-align: justify !important;
-}
-.date {
-    margin-top: 10px;
-    margin-right: 10px;
-}
+
 .paragraph1 {
     margin-top: 10px;
-    margin-left: 10px;
     margin-right: 10px;
     text-align: justify;
     color:#fff;
@@ -137,19 +122,13 @@ main img{
     height: 40px;
     border: solid 1px green;
     border-radius: 5px;
+    width: 100%;
+    text-indent: 10px;
 }
-
 .col-sm-5 {
     margin-bottom : 15px;
 }
-a {
-    transition: 1s;
-    text-decoration: none;
-    color:rgba(0, 20 , 20, 0.8);
-}
-a:hover{
-    color:rgba(0, 20 , 20, 0.8);
-}
+
 .nav-item{
     border-bottom: 1px solid rgba(0, 0, 0, 0);
     -webkit-transition: border 500ms ease;
@@ -171,28 +150,91 @@ a:hover{
 #tabs-1 img{
     width: 100%;
     height: 400px;
-    margin-bottom: 20px;
-    border-radius: 30px;
+    border-radius: 20px;
 }
-
-.price{
-    margin-left:140px;
-    color:#fff;
-}
-
-.edit{
-    background-color:rgba(0, 20 , 20, 0.8);
-    color:#fff;
-    -webkit-transition: 1.2s;
-    transition: 1.2s;
-    width: 100%;
-    font-weight: 800;
-    font-style: italic;
-}
-.edit:hover{
-    background-color:rgba(0, 20 , 20, 0);
-}
-a{
-    color:#fff;
+ul{
+    list-style: none;
 }
 /*############ TABS #################*/
+.owner{
+    color: #ffc107;
+}
+.price{
+    font-style: italic;
+}
+.caption-full h2 {
+    font-weight: 800;
+    text-align:left;
+    color:#fff;
+}
+
+button {
+    cursor:pointer;
+}
+/*############# massage #################*/
+.card {
+    width: 542px;
+    margin-left: 15px;
+    margin-top: 58px;
+    border-radius: 25px;
+    padding-bottom: 15px;
+    background-color: rgba(0, 20, 20, 0.5);
+}
+.textarea{
+    margin-top: 15px;
+}
+.edit{
+    background-color:rgba(0, 20 , 20, 0.5);
+    color:#fff;
+    text-decoration: none;
+    -webkit-transition: 0.7s;
+    transition: 0.7s;
+    width: -webkit-fill-available;
+}
+.edit:hover{
+    background-color:rgb(255, 255 , 255);
+    color:rgb(0, 20 , 20);
+}
+#messages {
+    margin-top: 10px;
+}
+.col-md-12{
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+    margin-top: 10px;
+    margin-right: 10px;
+    margin-left: 14px;
+    max-width: 95% !important;
+}
+.col-md-2{
+    margin-left: -10px;
+}
+.date {
+    margin-top: 10px;
+    margin-right: 10px;
+    color: white;
+    font-size: 20px;
+}
+.paragraph{
+    text-align: justify !important;
+    color: white;
+    font-style: italic;
+    margin-top: 10px !important;
+
+}
+
+strong {
+    font-size: 24px;
+}
+.loginRequierd{
+    background-color: rgba(0, 0, 0, 0.0);
+
+}
+.loginRequierdText{
+    text-align: center;
+    color: red;
+    margin-top: 10px;
+    font-size: 20px;
+    font-style: italic;
+}
+/*############# massage #################*/

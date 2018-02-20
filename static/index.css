@@ -91,8 +91,8 @@ nav{
 .products{
     background-color:rgba(0, 20 , 20, 0.8);
     color:#fff;
-    -webkit-transition: 1.2s;
-    transition: 1.2s;
+    -webkit-transition: 0.7s;
+    transition: 0.7s;
 }
 .products:hover{
     background-color:rgb(243, 245 , 249);
