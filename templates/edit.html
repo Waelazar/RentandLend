@@ -41,16 +41,17 @@
         <div class="container view-height">
             <div class="account-wall">
             {% if user is defined  %}
-                    <div class="img__wrap"><img class="img-fluid rounded-circle" id="image-preview" onclick="HandleBrowseClick('image_edit');" src="{{ user.path }}"/>
-                        <div class="overlay">
+                    <div class="img__wrap">
+                        <img class="img-fluid rounded-circle" id="image-preview"  src="{{ user.path }}"/>
+                        <div class="overlay" onclick="HandleBrowseClick('image_edit');">
                             <div class="text">Edit image</div>
                         </div>
-                        </div>
-                        <br>
-                    <hr>
+                    </div>
+                    <br>
+
                     <form action="/edit_user?user_id={{ user.user_id }}" enctype="multipart/form-data" method="post">
                         <table>
-                            <input style="display:none" class="form-control" name="image_edit" id ="image_edit" onchange="document.getElementById('image-preview').src = window.URL.createObjectURL(this.files[0])" type="file">
+                        <input style="display:none" class="form-control" name="image_edit" id ="image_edit" onchange="document.getElementById('image-preview').src = window.URL.createObjectURL(this.files[0])" type="file">
                             <tr>
                                 <td>Firstname:</td>
                                 <td><input  autocomplete="off" autofocus class="form-control" name="firstname" placeholder="Firstname" type="text" value="{{ user.firstname }}" required/></td>
@@ -75,8 +76,8 @@
                     <button class="btn btn-lg edit" type="submit">Apply Edit</button>
                 </form>
                 {% else %}
-                <div class="img__wrap"><img class="img-fluid rounded-circle" id="image-preview" onclick="HandleBrowseClick('image_edit');" src="http://via.placeholder.com/250x250?text=Upload+image"/>
-                    <div class="overlay">
+                <div class="img__wrap"><img class="img-fluid rounded-circle" id="image-preview" src="http://via.placeholder.com/250x250?text=Upload+image"/>
+                    <div class="overlay" onclick="HandleBrowseClick('image_edit');">
                         <div class="text">Upload new image</div>
                     </div>
                     </div>

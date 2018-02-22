@@ -40,6 +40,7 @@
 
         <div class="container">
             <div class="row account-wall">
+
                 <div class="col-md-6">
                     <div id="tabs">
                         <ul class="tabs">
@@ -51,18 +52,19 @@
                         </div>
                         <div id="tabs-2">
                             <div id="map"></div>
+                            <div id="pano"></div>
                         </div>
                     </div>
                     <div class="caption-full">
                         <h2>{{ product["name"] }}</h2>
                         <h3 class="owner"><em>Lender: {{ product["username"] }}</em><span class="price float-right">Price {{ usd(product["price"]) }}</span></h3>
+                        <h3 class="owner"><em>Location: {{ product["location"] }}</em></h3>
                         <p class="paragraph1">{{ product["description"] }}</p>
                         {% if product_owner %}
                             <a class="btn btn-lg edit" href="/edit_product?product_id={{product["product_id"]}}">Edit product</a>
                         {% endif %}
                     </div>
                 </div>
-
                 <div class="col-md-6">
                     <div class="card">
                         <div class="row" id="messages">
@@ -77,7 +79,7 @@
                             <p class="text-left paragraph">
                                 {{msg.text}}
                             </p>
-                        </div>
+                            </div>
                         {% endfor %}
                         </div>
                         {% if user_id is not none %}
@@ -96,11 +98,9 @@
                         {% endif %}
                     </div>
                 </div>
-
-
+            </div>
         </div>
-    </div>
-</div>
+</body>
 
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.8/socket.io.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -129,6 +129,15 @@
                     position: mapCenter,
                     map: map,
                 });
+                var panorama = new google.maps.StreetViewPanorama(
+                    document.getElementById('pano'), {
+                      position: mapCenter,
+                      pov: {
+                        heading: 34,
+                        pitch: 10
+                      }
+                    });
+                map.setStreetView(panorama);
             }
     </script>
     <script type="text/javascript">
@@ -154,4 +163,6 @@
             $('#myMessage').val('');
         });
     });
+
     </script>
+</html>

@@ -268,12 +268,13 @@ def add():
                 or not request.form.get("price") or not request.files.get('image'):
             return apology("Missing required field", 400)
 
-        result = db.execute("INSERT INTO product (name, description, user_id, latitude, longitude, price) VALUES(:name, :description, :user_id, :latitude, :longitude, :price)",
+        result = db.execute("INSERT INTO product (name, description, user_id, latitude, longitude, price, location) VALUES(:name, :description, :user_id, :latitude, :longitude, :price, :location)",
                             name=request.form.get("product_name"),
                             description=request.form.get("product_description") or "null",
                             user_id=session.get("user_id"),
                             latitude=request.form.get("latitude"),
                             longitude=request.form.get("longitude"),
+                            location = request.form.get("location"),
                             price=request.form.get("price"))
 
         #main image
@@ -317,7 +318,7 @@ def edit_product():
         return apology("must provice product id", 400)
 
     if request.method == "GET":
-        product = db.execute("select name, description, price, longitude, latitude, product_id from product where product_id=:product_id and user_id=:user_id",
+        product = db.execute("select name, description, price, longitude, latitude, location, product_id from product where product_id=:product_id and user_id=:user_id",
                          product_id=product_id, user_id=session.get("user_id"))
         if not product:
             return apology("Product does not exist", 404)
@@ -328,12 +329,13 @@ def edit_product():
             return apology("Missing required field", 400)
 
         result = db.execute("update product set name=:name, description=:description, latitude=:latitude, longitude=:longitude,"
-                            " price=:price where product_id=:product_id",
+                            " price=:price location = :location where product_id=:product_id",
                             name=request.form.get("product_name"),
                             description=request.form.get("product_description") or "null",
                             latitude=request.form.get("latitude"),
                             longitude=request.form.get("longitude"),
                             price=request.form.get("price"),
+                            location = request.form.get("location"),
                             product_id=product_id)
         if not result:
             return apology("Could not save product",400)
@@ -347,7 +349,7 @@ def show():
     if not product_id:
         return apology("must provice product id",400)
 
-    product = db.execute("select name, description, price, product_id, latitude, longitude, user_id, username\
+    product = db.execute("select name, description, price, product_id, latitude, longitude, location ,user_id, username\
                         from product join users on users.id=user_id where product_id=:product_id",
                         product_id=product_id)
 
