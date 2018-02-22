@@ -48,8 +48,18 @@
                             <li class="nav-item"><a class="nav-link text-white" href="#tabs-2">Google Map</a></li>
                         </ul>
                         <div id="tabs-1">
-                           <img class="img-fluid" src="{{ image_paths[0]["path"]}}">
+
+
+                            {% for j in image_paths %}
+                                <div class="mySlides fade_image">
+                                  <img class="img-fluid" src="static\images\{{j.path}}">
+                                </div>
+                            {% endfor %}
+                            <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+                            <a class="next" onclick="plusSlides(1)">&#10095;</a>
+
                         </div>
+
                         <div id="tabs-2">
                             <div id="map"></div>
                             <div id="pano"></div>
@@ -109,6 +119,29 @@
     <script async defer src="https://maps.googleapis.com/maps/api/js?key={{ key | urlencode }}&callback=initMap"></script>
     <script>
 
+    var slideIndex = 1;
+    showSlides(slideIndex);
+
+    function plusSlides(n) {
+      showSlides(slideIndex += n);
+    }
+
+    function currentSlide(n) {
+      showSlides(slideIndex = n);
+    }
+
+    function showSlides(n) {
+      var i;
+      var slides = document.getElementsByClassName("mySlides");
+      if (n > slides.length) {slideIndex = 1}
+      if (n < 1) {slideIndex = slides.length}
+      for (i = 0; i < slides.length; i++) {
+          slides[i].style.display = "none";
+      }
+
+      slides[slideIndex-1].style.display = "block";
+    }
+
     var mapCenter = {lat: Number('{{product["latitude"]}}'), lng: Number('{{product["longitude"]}}')};
             jQuery(function(){
                 jQuery("#tabs").tabs({
@@ -141,6 +174,7 @@
             }
     </script>
     <script type="text/javascript">
+
     $(document).ready(function() {
         var socket = io.connect('http://ide50-waelazar1.cs50.io:8080');
         socket.on('message', function(msg) {

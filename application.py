@@ -363,13 +363,12 @@ def show():
                              " order by flag_main_image desc",
                              product_id=product_id)
 
-    for image in image_paths:
-        image["path"] = os.path.join(app.config['UPLOAD_FOLDER'], image["path"])
 
     messages = db.execute("select text, username, product_id, time from messages"
                           " join users on users.id=messages.user_id"
                           " where product_id=:product_id",
                           product_id=product_id)
+
 
 
     is_own_product = None
