@@ -1,6 +1,7 @@
 import os
 from cs50.sql import SQL
-from flask import Flask, flash, redirect, render_template, request, session
+# import sqlite3
+from flask import Flask, redirect, render_template, request, session
 from flask_session import Session
 from tempfile import mkdtemp
 
@@ -31,6 +32,7 @@ def usd(value):
     """Formats value as USD."""
     return f"${value:,.2f}"
 
+
 # Custom filter
 app.jinja_env.filters["usd"] = usd
 
@@ -44,8 +46,7 @@ app.config["SESSION_TYPE"] = "filesystem"
 app.config['UPLOAD_FOLDER'] = "static/images"
 Session(app)
 
-ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
-
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
 db = SQL("sqlite:///database.db")
 
@@ -56,27 +57,24 @@ def index():
 
     if not search_term:
         main_data = db.execute(" select name, description, product.product_id, price, path from product \
-        left outer join product_image i ON product.product_id = i.product_id and i.flag_main_image=1\
-        left outer join images on images.id = i.image_id")
+                                left outer join product_image i ON product.product_id = i.product_id and i.flag_main_image=1\
+                                left outer join images on images.id = i.image_id")
     else:
         main_data = db.execute(" select name, description, product.product_id, price, path from product \
                 left outer join product_image i ON product.product_id = i.product_id and i.flag_main_image=1\
                 left outer join images on images.id = i.image_id \
                 where upper(name) like upper('%' || :search_term || '%') or upper(description) like upper('%' || :search_term || '%')",
                                search_term=search_term)
-
     for image in main_data:
-        if image["path"] != None:
+        if image["path"] is not None:
             image["path"] = os.path.join(app.config['UPLOAD_FOLDER'], image["path"])
 
-    return render_template("index.html", products = main_data)
-
+    return render_template("index.html", products=main_data)
 
 
 @app.route("/profile", methods=["GET", "POST"])
 @login_required
 def profile():
-
     user = db.execute("SELECT * FROM dashboard"
                       " left outer join images on images.id=dashboard.image_id "
                       " WHERE user_id = :user_id ", user_id=session["user_id"])
@@ -108,30 +106,28 @@ def edit():
         file = request.files.get('image')
         image_id = save_image(file)
 
-        if not user :
+        if not user:
 
             db.execute("INSERT INTO dashboard (firstname, lastname, birthday, city, country, user_id, image_id) \
                     VALUES(:firstname, :lastname, :birthday, :city, :country, :user_id, :image_id)",
-                    firstname = firstname, lastname = lastname, birthday = birthday,
-                    city= city, country = country, user_id=session["user_id"], image_id = image_id)
+                       firstname=firstname, lastname=lastname, birthday=birthday,
+                       city=city, country=country, user_id=session["user_id"], image_id=image_id)
 
-        else :
+        else:
 
             db.execute("UPDATE dashboard SET firstname = :firstname, lastname = :lastname, birthday = :birthday, \
                     city = :city, country = :country , user_id= :user_id, image_id = :image_id",
-                    firstname = firstname, lastname = lastname, birthday = birthday,
-                    city= city, country = country, user_id=session["user_id"], image_id = image_id)
-
+                       firstname=firstname, lastname=lastname, birthday=birthday,
+                       city=city, country=country, user_id=session["user_id"], image_id=image_id)
 
         return redirect("/profile")
     else:
         return render_template("edit.html")
 
 
-@app.route("/edit_user", methods=["GET","POST"])
+@app.route("/edit_user", methods=["GET", "POST"])
 @login_required
 def edit_user():
-
     _id = request.args.get("user_id")
     if not _id:
         return apology("must provice user id", 400)
@@ -147,36 +143,39 @@ def edit_user():
 
         return render_template("edit.html", user=user[0])
     else:
-        if not request.form.get("firstname") or not request.form.get("lastname") or not request.form.get("birthday") or not request.form.get("city") or not request.form.get("country"):
+        if not request.form.get("firstname") or not request.form.get("lastname") or not request.form.get(
+                "birthday") or not request.form.get("city") or not request.form.get("country"):
             return apology("Missing required field", 400)
 
         image_user = db.execute("SELECT * FROM dashboard"
-                          " join images on images.id=dashboard.image_id"
-                          " WHERE user_id = :user_id ", user_id=session["user_id"])
+                                " join images on images.id=dashboard.image_id"
+                                " WHERE user_id = :user_id ", user_id=session["user_id"])
 
         file = request.files.get('image_edit')
-        if file :
+        if file:
             image_id = save_image(file)
-            result = db.execute("update dashboard set firstname=:firstname, lastname=:lastname, birthday=:birthday, city=:city,"
-                                " country=:country, image_id = :image_id where user_id=:user_id",
-                                firstname=request.form.get("firstname"),
-                                lastname=request.form.get("lastname") or "null",
-                                birthday=request.form.get("birthday"),
-                                city=request.form.get("city"),
-                                country=request.form.get("country"),
-                                image_id = image_id,
-                                user_id=_id)
-        else :
-            result = db.execute("update dashboard set firstname=:firstname, lastname=:lastname, birthday=:birthday, city=:city,"
-                                " country=:country where user_id=:user_id",
-                                firstname=request.form.get("firstname"),
-                                lastname=request.form.get("lastname") or "null",
-                                birthday=request.form.get("birthday"),
-                                city=request.form.get("city"),
-                                country=request.form.get("country"),
-                                user_id=_id)
+            result = db.execute(
+                "update dashboard set firstname=:firstname, lastname=:lastname, birthday=:birthday, city=:city,"
+                " country=:country, image_id = :image_id where user_id=:user_id",
+                firstname=request.form.get("firstname"),
+                lastname=request.form.get("lastname") or "null",
+                birthday=request.form.get("birthday"),
+                city=request.form.get("city"),
+                country=request.form.get("country"),
+                image_id=image_id,
+                user_id=_id)
+        else:
+            result = db.execute(
+                "update dashboard set firstname=:firstname, lastname=:lastname, birthday=:birthday, city=:city,"
+                " country=:country where user_id=:user_id",
+                firstname=request.form.get("firstname"),
+                lastname=request.form.get("lastname") or "null",
+                birthday=request.form.get("birthday"),
+                city=request.form.get("city"),
+                country=request.form.get("country"),
+                user_id=_id)
         if not result:
-            return apology("Could not save product",400)
+            return apology("Could not save product", 400)
 
         return redirect("/profile")
 
@@ -218,7 +217,6 @@ def login():
         return render_template("login.html")
 
 
-
 @app.route("/register", methods=["GET", "POST"])
 def register():
     """Register user"""
@@ -257,49 +255,48 @@ def register():
         return render_template("register.html")
 
 
-
-
 @app.route("/add", methods=["GET", "POST"])
 @login_required
 def add():
-
     if request.method == "POST":
-        if not request.form.get("product_name") or not request.form.get("latitude") or not request.form.get("longitude")\
+        if not request.form.get("product_name") or not request.form.get("latitude") or not request.form.get("longitude") \
                 or not request.form.get("price") or not request.files.get('image'):
             return apology("Missing required field", 400)
 
-        result = db.execute("INSERT INTO product (name, description, user_id, latitude, longitude, price, location) VALUES(:name, :description, :user_id, :latitude, :longitude, :price, :location)",
-                            name=request.form.get("product_name"),
-                            description=request.form.get("product_description") or "null",
-                            user_id=session.get("user_id"),
-                            latitude=request.form.get("latitude"),
-                            longitude=request.form.get("longitude"),
-                            location = request.form.get("location"),
-                            price=request.form.get("price"))
+        result = db.execute(
+            "INSERT INTO product (name, description, user_id, latitude, longitude, price, location) VALUES(:name, :description, :user_id, :latitude, :longitude, :price, :location)",
+            name=request.form.get("product_name"),
+            description=request.form.get("product_description") or "null",
+            user_id=session.get("user_id"),
+            latitude=request.form.get("latitude"),
+            longitude=request.form.get("longitude"),
+            location=request.form.get("location"),
+            price=request.form.get("price"))
 
-        #main image
+        # main image
         img = request.files.get('image')
         # found some pictures
         product_id = result
         if img:
-            #save image
+            # save image
             if img.filename == "" or not allowed_file(img.filename):
                 return apology("Illegal main file", 400)
 
             image_id = save_image(img)
-            rs = db.execute("INSERT INTO product_image (product_id, image_id, flag_main_image) VALUES (:product_id, :image_id, 1)",
-                            product_id=product_id,
-                            image_id = image_id)
+            rs = db.execute(
+                "INSERT INTO product_image (product_id, image_id, flag_main_image) VALUES (:product_id, :image_id, 1)",
+                product_id=product_id,
+                image_id=image_id)
         # additional images
-        if request.files.getlist("images[]") and len(request.files.getlist("images[]")) >= 2 :
+        if request.files.getlist("images[]") and len(request.files.getlist("images[]")) >= 2:
             for image in request.files.getlist("images[]"):
-                #save image
+                # save image
                 if image.filename == "" or not allowed_file(image.filename):
                     return apology("Illegal file", 400)
                 image_id = save_image(image)
                 rs = db.execute("INSERT INTO product_image (product_id, image_id) VALUES (:product_id, :image_id)",
                                 product_id=product_id,
-                                image_id = image_id)
+                                image_id=image_id)
                 if not rs:
                     return apology("Couldn't save image", 400)
 
@@ -310,7 +307,8 @@ def add():
     else:
         return render_template("add.html")
 
-@app.route("/edit_product", methods=["GET","POST"])
+
+@app.route("/edit_product", methods=["GET", "POST"])
 @login_required
 def edit_product():
     product_id = request.args.get("product_id")
@@ -318,27 +316,30 @@ def edit_product():
         return apology("must provice product id", 400)
 
     if request.method == "GET":
-        product = db.execute("select name, description, price, longitude, latitude, location, product_id from product where product_id=:product_id and user_id=:user_id",
-                         product_id=product_id, user_id=session.get("user_id"))
+        product = db.execute(
+            "select name, description, price, longitude, latitude, location, product_id from product where product_id=:product_id and user_id=:user_id",
+            product_id=product_id, user_id=session.get("user_id"))
         if not product:
             return apology("Product does not exist", 404)
 
         return render_template("add.html", product=product[0])
     else:
-        if not request.form.get("product_name") or not request.form.get("latitude") or not request.form.get("longitude") or not request.form.get("price"):
+        if not request.form.get("product_name") or not request.form.get("latitude") or not request.form.get(
+                "longitude") or not request.form.get("price"):
             return apology("Missing required field", 400)
 
-        result = db.execute("update product set name=:name, description=:description, latitude=:latitude, longitude=:longitude,"
-                            " price=:price location = :location where product_id=:product_id",
-                            name=request.form.get("product_name"),
-                            description=request.form.get("product_description") or "null",
-                            latitude=request.form.get("latitude"),
-                            longitude=request.form.get("longitude"),
-                            price=request.form.get("price"),
-                            location = request.form.get("location"),
-                            product_id=product_id)
+        result = db.execute(
+            "update product set name=:name, description=:description, latitude=:latitude, longitude=:longitude,"
+            " price=:price location = :location where product_id=:product_id",
+            name=request.form.get("product_name"),
+            description=request.form.get("product_description") or "null",
+            latitude=request.form.get("latitude"),
+            longitude=request.form.get("longitude"),
+            price=request.form.get("price"),
+            location=request.form.get("location"),
+            product_id=product_id)
         if not result:
-            return apology("Could not save product",400)
+            return apology("Could not save product", 400)
 
         return redirect("/")
 
@@ -347,11 +348,11 @@ def edit_product():
 def show():
     product_id = request.args.get("product_id")
     if not product_id:
-        return apology("must provice product id",400)
+        return apology("must provice product id", 400)
 
     product = db.execute("select name, description, price, product_id, latitude, longitude, location ,user_id, username\
                         from product join users on users.id=user_id where product_id=:product_id",
-                        product_id=product_id)
+                         product_id=product_id)
 
     if not product:
         return apology("Product does not exist", 404)
@@ -363,13 +364,10 @@ def show():
                              " order by flag_main_image desc",
                              product_id=product_id)
 
-
     messages = db.execute("select text, username, product_id, time from messages"
                           " join users on users.id=messages.user_id"
                           " where product_id=:product_id",
                           product_id=product_id)
-
-
 
     is_own_product = None
     if not session.get("user_id") is None:
@@ -378,8 +376,10 @@ def show():
     if not session.get("user_id") is None:
         user_id = session["user_id"]
 
-    return render_template("detail.html", product = product[0],product_owner = is_own_product, image_paths = image_paths, user_id=user_id,
+    return render_template("detail.html", product=product[0], product_owner=is_own_product, image_paths=image_paths,
+                           user_id=user_id,
                            messages=messages)
+
 
 @app.route("/logout")
 def logout():
@@ -391,11 +391,12 @@ def logout():
     # Redirect user to login form
     return redirect("/")
 
+
 @socketio.on('message')
 def handleMessage(msg):
     # print('Message: ' + msg["message"] + " from user " + str(msg["user_id"]))
     rs = db.execute("select username from users where id=:user_id",
-               user_id=msg["user_id"])
+                    user_id=msg["user_id"])
     if not rs:
         return
     msg["username"] = rs[0]["username"]
@@ -406,13 +407,16 @@ def handleMessage(msg):
                user_id=msg["user_id"],
                product_id=msg["product_id"])
 
+
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+
 def errorhandler(e):
     """Handle error"""
     return apology(e.name, e.code)
+
 
 def save_image(image):
     """
@@ -423,13 +427,10 @@ def save_image(image):
     rs = db.execute("INSERT INTO images (path) values (:data)", data=filename)
     return rs
 
+
 # listen for errors
 for code in default_exceptions:
     app.errorhandler(code)(errorhandler)
 
-
 if __name__ == '__main__':
     socketio.run(app)
-
-
-
