@@ -260,7 +260,7 @@ def register():
 def add():
     if request.method == "POST":
         if not request.form.get("product_name") or not request.form.get("latitude") or not request.form.get("longitude") \
-                or not request.form.get("price") or not request.files.get('image'):
+                or not request.form.get("location") or not request.form.get("price") or not request.files.get('image'):
             return apology("Missing required field", 400)
 
         result = db.execute(
@@ -325,12 +325,12 @@ def edit_product():
         return render_template("add.html", product=product[0])
     else:
         if not request.form.get("product_name") or not request.form.get("latitude") or not request.form.get(
-                "longitude") or not request.form.get("price"):
+                "longitude") or not request.form.get("price") or not request.form.get("location"):
             return apology("Missing required field", 400)
 
         result = db.execute(
             "update product set name=:name, description=:description, latitude=:latitude, longitude=:longitude,"
-            " price=:price location = :location where product_id=:product_id",
+            " price=:price, location = :location where product_id=:product_id",
             name=request.form.get("product_name"),
             description=request.form.get("product_description") or "null",
             latitude=request.form.get("latitude"),
