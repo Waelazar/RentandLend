@@ -67,11 +67,11 @@
                     </div>
                     <div class="caption-full">
                         <h2>{{ product["name"] }}</h2>
-                        <h3 class="owner"><em>Lender: {{ product["username"] }}</em><span class="price float-right">Price {{ usd(product["price"]) }}</span></h3>
+                        <h3 class="owner"><em>Lender: {{ product["firstname"] }}</em><span class="price float-right">Price {{ usd(product["price"]) }}</span></h3>
                         <h3 class="owner"><em>Location: {{ product["location"] }}</em></h3>
                         <p class="paragraph1">{{ product["description"] }}</p>
                         {% if product_owner %}
-                            <a class="btn btn-lg edit" href="/edit_product?product_id={{product["product_id"]}}">Edit product</a>
+                            <a class="btn btn-lg edit" href="/edit_product?product_id={{product['product_id']}}">Edit product</a>
                         {% endif %}
                     </div>
                 </div>
@@ -80,7 +80,7 @@
                         <div class="row" id="messages">
                          {% for msg in messages %}
                             <div class="col-md-6">
-                            <p class="text-left paragraph"><strong>{{ msg.username }}</strong></p>
+                            <p class="text-left paragraph"><strong>{{ msg.firstname }}</strong></p>
                             </div>
                             <div class="col-md-6">
                             <p class="text-right date">{{ msg.time }}</p>
@@ -176,10 +176,10 @@
     <script type="text/javascript">
 
     $(document).ready(function() {
-        var socket = io.connect('http://ide50-waelazar1.cs50.io:8080');
+        var socket = io.connect('http://127.0.0.1:5000');
         socket.on('message', function(msg) {
             $("#messages").append('<hr><div class="col-md-6 text-left">\
-                            <p class="paragraph"><strong>' + msg.username + '</strong></p>\
+                            <p class="paragraph"><strong>' + msg.firstname + '</strong></p>\
                             </div>\
                             <div class="col-md-6 text-right">\
                             <p class="date">'+msg.time+ '</p>\

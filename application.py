@@ -364,8 +364,9 @@ def show():
                              " order by flag_main_image desc",
                              product_id=product_id)
 
-    messages = db.execute("select text, username, product_id, time from messages"
+    messages = db.execute("select text, username, firstname ,product_id, time from messages"
                           " join users on users.id=messages.user_id"
+                          " join dashboard on dashboard.user_id = messages.user_id"
                           " where product_id=:product_id",
                           product_id=product_id)
 
@@ -395,11 +396,11 @@ def logout():
 @socketio.on('message')
 def handleMessage(msg):
     # print('Message: ' + msg["message"] + " from user " + str(msg["user_id"]))
-    rs = db.execute("select username from users where id=:user_id",
+    rs = db.execute("select firstname from dashboard where user_id=:user_id",
                     user_id=msg["user_id"])
     if not rs:
         return
-    msg["username"] = rs[0]["username"]
+    msg["firstname"] = rs[0]["firstname"]
     msg["time"] = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     send(msg, broadcast=True)
     db.execute("insert into messages(text, user_id, product_id) values (:txt,:user_id,:product_id)",
