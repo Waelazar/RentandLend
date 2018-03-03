@@ -1,9 +1,10 @@
 {% extends "layout.html" %}
 
 {% block title %}
-    Apology
+Apology
 {% endblock %}
 
 {% block main %}
-    <img alt="{{ top }}" class="border img-fluid" src="https://memegen.link/joker/{{ top | urlencode }}/{{ bottom | urlencode }}.jpg?font=typoline-demo"/>
+<img alt="{{ top }}" class="border img-fluid"
+     src="https://memegen.link/joker/{{ top | urlencode }}/{{ bottom | urlencode }}.jpg?font=typoline-demo"/>
 {% endblock %}
