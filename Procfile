@@ -1,1 +1,1 @@
-web: python application.py runserver 0.0.0.0:33507
+web: py application.py runserver 127.0.0.0:5000
