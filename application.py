@@ -434,4 +434,6 @@ for code in default_exceptions:
     app.errorhandler(code)(errorhandler)
 
 if __name__ == '__main__':
+    port = int(os.environ.get("PORT", 33507))
+    app.run(debug=True, port=port)
     socketio.run(app)
