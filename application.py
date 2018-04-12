@@ -1,5 +1,4 @@
 import os
-from pml import app
 from cs50.sql import SQL
 # import sqlite3
 from flask import Flask, redirect, render_template, request, session
@@ -435,6 +434,4 @@ for code in default_exceptions:
     app.errorhandler(code)(errorhandler)
 
 if __name__ == '__main__':
-    port = int(os.environ.get("PORT", 33507))
-    app.run(debug=True, port=port)
     socketio.run(app)
