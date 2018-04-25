@@ -6,8 +6,7 @@ a platform where a user can rent a product for a period of time, also can lend a
 
 ## Problem Definition:
 
-in only 24 hours should be ready to deploy.
-
+buying a new equipments is very expensive, so borrow them for a period of time would make the life easier. 
 ## User Stories:
 
 1. As a user i can register to the websites
@@ -44,3 +43,9 @@ open project interpreter ``` Ctrl + Alt + S ``` and add _**venv**_
 2. Pip Install flask // web server
 3. pip install Flask_session || easy_install Flask_session
 4. pip install flask_socketio
+
+## install the requirments:
+
+1. Activate the environment using: source venv/bin/activate ( Mac )
+for windows check here http://pymote.readthedocs.io/en/latest/install/windows_virtualenv.html
+2. pip3 install -r requirements.txt
