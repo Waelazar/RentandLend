@@ -1,6 +1,6 @@
 import os
 from cs50.sql import SQL
-# import sqlite3
+# # import sqlite3
 from flask import Flask, redirect, render_template, request, session
 from flask_session import Session
 from tempfile import mkdtemp
@@ -17,7 +17,6 @@ from datetime import datetime
 
 app = Flask(__name__)
 socketio = SocketIO(app)
-
 
 # Ensure responses aren't cached
 @app.after_request
