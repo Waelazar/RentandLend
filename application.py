@@ -55,7 +55,7 @@ def index():
     search_term = request.args.get("search")
 
     if not search_term:
-        main_data = db.execute(" select name, description, product.product_id, price, path from product \
+        main_data = db.execute("select name, description, product.product_id, price, path from product \
                                 left outer join product_image i ON product.product_id = i.product_id and i.flag_main_image=1\
                                 left outer join images on images.id = i.image_id")
     else:
@@ -237,6 +237,11 @@ def register():
         if not confirmation or confirmation != password:
             return apology("must confirm password", 400)
 
+        existUser = db.execute("SELECT * FROM users WHERE username = :username",
+                          username=request.form.get("username"))
+
+        if existUser:
+            return apology("username already exist", 400)
         # Insert username and hashed password into the db
         result = db.execute("INSERT INTO users (username, password_hash) VALUES(:username, :password_hash)",
                             username=request.form.get("username"), password_hash=generate_password_hash(password))
