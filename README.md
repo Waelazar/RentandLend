@@ -49,3 +49,11 @@ open project interpreter ``` Ctrl + Alt + S ``` and add _**venv**_
 1. Activate the environment using: source venv/bin/activate ( Mac )
 for windows check here http://pymote.readthedocs.io/en/latest/install/windows_virtualenv.html
 2. pip3 install -r requirements.txt
+
+## How to Run:
+1. make sure you are in the root directory
+2. use the command ```set FLASK_APP=application.py ``` to set the name of the flask app
+3. python -m flask run
+
+*if the chat doesn't work make sure to change the socketIo url to the Url yor are using with the port
+that you are using*
