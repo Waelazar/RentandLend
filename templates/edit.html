@@ -78,7 +78,7 @@
                 {% else %}
                 <div class="img__wrap">
                     <img class="img-fluid rounded-circle" id="image-preview" src="http://via.placeholder.com/250x250?text=Upload+image"/>
-                    <div class="overlay" onclick="HandleBrowseClick('image_edit');">
+                    <div class="overlay" onclick="HandleBrowseClick('image');">
                         <div class="text">Upload new image</div>
                     </div>
                 </div>
@@ -86,7 +86,7 @@
                 <hr>
                 <form action="/edit" enctype="multipart/form-data" method="post">
                     <table>
-                        <input style="display:none" class="form-control" name="image_edit" id ="image_edit" onchange="document.getElementById('image-preview').src = window.URL.createObjectURL(this.files[0])" type="file" required/>
+                        <input style="display:none" class="form-control" name="image" id ="image" onchange="document.getElementById('image-preview').src = window.URL.createObjectURL(this.files[0])" type="file" required/>
                         <tr>
                             <td>Firstname:</td>
                             <td><input autocomplete="off" autofocus class="form-control" name="firstname" placeholder="Firstname" type="text" required /></td>
