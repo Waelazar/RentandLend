@@ -76,11 +76,12 @@
                     <button class="btn btn-lg edit" type="submit">Apply Edit</button>
                 </form>
                 {% else %}
-                <div class="img__wrap"><img class="img-fluid rounded-circle" id="image-preview" src="http://via.placeholder.com/250x250?text=Upload+image"/>
-                    <div class="overlay" onclick="HandleBrowseClick('image_edit');">
+                <div class="img__wrap">
+                    <img class="img-fluid rounded-circle" id="image-preview" src="http://via.placeholder.com/250x250?text=Upload+image"/>
+                    <div class="overlay" onclick="HandleBrowseClick('image');">
                         <div class="text">Upload new image</div>
                     </div>
-                    </div>
+                </div>
                     <br>
                 <hr>
                 <form action="/edit" enctype="multipart/form-data" method="post">
