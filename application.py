@@ -18,6 +18,7 @@ from datetime import datetime
 app = Flask(__name__)
 socketio = SocketIO(app)
 
+
 # Ensure responses aren't cached
 @app.after_request
 def after_request(response):
@@ -52,38 +53,49 @@ db = SQL("sqlite:///database.db")
 
 @app.route("/")
 def index():
+    # Select the text that the use typed
     search_term = request.args.get("search")
+
+    # Select the search text from the database if not exist
 
     if not search_term:
         main_data = db.execute("select name, description, product.product_id, price, path from product \
                                 left outer join product_image i ON product.product_id = i.product_id and i.flag_main_image=1\
                                 left outer join images on images.id = i.image_id")
+    # Select the search text from the database if exist
     else:
         main_data = db.execute(" select name, description, product.product_id, price, path from product \
                 left outer join product_image i ON product.product_id = i.product_id and i.flag_main_image=1\
                 left outer join images on images.id = i.image_id \
                 where upper(name) like upper('%' || :search_term || '%') or upper(description) like upper('%' || :search_term || '%')",
                                search_term=search_term)
+
+    # Select images and Display them
     for image in main_data:
         if image["path"] is not None:
             image["path"] = os.path.join(app.config['UPLOAD_FOLDER'], image["path"])
 
+    # User reached route via GET
     return render_template("index.html", products=main_data)
 
 
 @app.route("/profile", methods=["GET", "POST"])
 @login_required
 def profile():
+    # Select all the data in the user profile.
     user = db.execute("SELECT * FROM dashboard"
                       " left outer join images on images.id=dashboard.image_id "
                       " WHERE user_id = :user_id ", user_id=session["user_id"])
 
+    # Redirect User to create new account if doesn't have data
     if not user:
         return redirect("/edit")
 
+    # Display user image
     for image in user:
         image["path"] = os.path.join(app.config['UPLOAD_FOLDER'], image["path"])
 
+    # User reached route via GET
     return render_template("profile.html", user_data=user[0])
 
 
@@ -91,29 +103,40 @@ def profile():
 @login_required
 def edit():
     if request.method == "POST":
-
+        # Select the first name from the user
         firstname = request.form.get("firstname")
+
+        # Select the last name from the user
         lastname = request.form.get("lastname")
+
+        # Select the birthday from the user
         birthday = request.form.get("birthday")
+
+        # Select the city from the user
         city = request.form.get("city")
+
+        # Select the country from the user
         country = request.form.get("country")
 
+        # Select User data
         user = db.execute("SELECT * FROM dashboard"
                           " join images on images.id=dashboard.image_id"
                           " WHERE user_id = :user_id ", user_id=session["user_id"])
 
+
         file = request.files.get('image')
+
+        # Save Image
         image_id = save_image(file)
 
+        # Insert new User data
         if not user:
-
             db.execute("INSERT INTO dashboard (firstname, lastname, birthday, city, country, user_id, image_id) \
                     VALUES(:firstname, :lastname, :birthday, :city, :country, :user_id, :image_id)",
                        firstname=firstname, lastname=lastname, birthday=birthday,
                        city=city, country=country, user_id=session["user_id"], image_id=image_id)
-
+        # Update User data
         else:
-
             db.execute("UPDATE dashboard SET firstname = :firstname, lastname = :lastname, birthday = :birthday, \
                     city = :city, country = :country , user_id= :user_id, image_id = :image_id",
                        firstname=firstname, lastname=lastname, birthday=birthday,
@@ -127,29 +150,33 @@ def edit():
 @app.route("/edit_user", methods=["GET", "POST"])
 @login_required
 def edit_user():
+
+    # Get the user Id
     _id = request.args.get("user_id")
     if not _id:
         return apology("must provice user id", 400)
 
     if request.method == "GET":
+
+        # Select all user profile data
         user = db.execute("select * from dashboard"
                           " join images on images.id=dashboard.image_id"
                           " WHERE user_id = :user_id ", user_id=session["user_id"])
         if not user:
             return apology("user does not exist", 404)
+
+        # Select the image of the user
         for image in user:
             image["path"] = os.path.join(app.config['UPLOAD_FOLDER'], image["path"])
 
         return render_template("edit.html", user=user[0])
+
     else:
         if not request.form.get("firstname") or not request.form.get("lastname") or not request.form.get(
                 "birthday") or not request.form.get("city") or not request.form.get("country"):
             return apology("Missing required field", 400)
 
-        image_user = db.execute("SELECT * FROM dashboard"
-                                " join images on images.id=dashboard.image_id"
-                                " WHERE user_id = :user_id ", user_id=session["user_id"])
-
+        # Select the new image and Saved in the images folder
         file = request.files.get('image_edit')
         if file:
             image_id = save_image(file)
@@ -238,7 +265,7 @@ def register():
             return apology("must confirm password", 400)
 
         existUser = db.execute("SELECT * FROM users WHERE username = :username",
-                          username=request.form.get("username"))
+                               username=request.form.get("username"))
 
         if existUser:
             return apology("username already exist", 400)
@@ -263,10 +290,12 @@ def register():
 @login_required
 def add():
     if request.method == "POST":
+        # Return Apology if the product not complete
         if not request.form.get("product_name") or not request.form.get("latitude") or not request.form.get("longitude") \
                 or not request.form.get("location") or not request.form.get("price") or not request.files.get('image'):
             return apology("Missing required field", 400)
 
+        # Insert the product information into the database
         result = db.execute(
             "INSERT INTO product (name, description, user_id, latitude, longitude, price, location) VALUES(:name, :description, :user_id, :latitude, :longitude, :price, :location)",
             name=request.form.get("product_name"),
@@ -277,12 +306,14 @@ def add():
             location=request.form.get("location"),
             price=request.form.get("price"))
 
-        # main image
+        # Main image
         img = request.files.get('image')
-        # found some pictures
+
+        # Found some pictures
         product_id = result
+
         if img:
-            # save image
+            # Save image
             if img.filename == "" or not allowed_file(img.filename):
                 return apology("Illegal main file", 400)
 
@@ -291,9 +322,11 @@ def add():
                 "INSERT INTO product_image (product_id, image_id, flag_main_image) VALUES (:product_id, :image_id, 1)",
                 product_id=product_id,
                 image_id=image_id)
+
         # additional images
         if request.files.getlist("images[]") and len(request.files.getlist("images[]")) >= 2:
             for image in request.files.getlist("images[]"):
+
                 # save image
                 if image.filename == "" or not allowed_file(image.filename):
                     return apology("Illegal file", 400)
@@ -354,6 +387,7 @@ def show():
     if not product_id:
         return apology("must provice product id", 400)
 
+    # Select the product data to display it
     product = db.execute("select name, description, price, product_id, latitude, longitude, location ,user_id, username\
                         from product join users on users.id=user_id where product_id=:product_id",
                          product_id=product_id)
@@ -368,12 +402,14 @@ def show():
                              " order by flag_main_image desc",
                              product_id=product_id)
 
+    # Select the messages of the user
     messages = db.execute("select text, username, firstname ,product_id, time from messages"
                           " join users on users.id=messages.user_id"
                           " join dashboard on dashboard.user_id = messages.user_id"
                           " where product_id=:product_id",
                           product_id=product_id)
 
+    # To check if the user is own the product or not
     is_own_product = None
     if not session.get("user_id") is None:
         is_own_product = session["user_id"] == product[0]["user_id"]
@@ -399,14 +435,15 @@ def logout():
 
 @socketio.on('message')
 def handleMessage(msg):
-    # print('Message: ' + msg["message"] + " from user " + str(msg["user_id"]))
+    # Select the fistname of the user
     rs = db.execute("select firstname from dashboard where user_id=:user_id",
                     user_id=msg["user_id"])
-    if not rs:
-        return
+
     msg["firstname"] = rs[0]["firstname"]
     msg["time"] = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     send(msg, broadcast=True)
+
+    # Insert the msg into the database
     db.execute("insert into messages(text, user_id, product_id) values (:txt,:user_id,:product_id)",
                txt=msg["message"],
                user_id=msg["user_id"],
@@ -422,7 +459,7 @@ def errorhandler(e):
     """Handle error"""
     return apology(e.name, e.code)
 
-
+# function save the image in the images folder
 def save_image(image):
     """
     save image and return its id
