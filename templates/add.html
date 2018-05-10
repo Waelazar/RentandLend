@@ -73,7 +73,7 @@
                 </div>
                 <button class="btn btn-lg add" type="submit">Apply Edit</button>
                 {% else %}
-                <button class="btn_image" onclick="HandleBrowseClick('main_image');">Upload main image</button>
+                <button class="btn_image" onclick="HandleBrowseClick('main_image');" required>Upload main image</button>
                 <button class="btn_image" onclick="HandleBrowseClick('sub_image');">Upload sub images</button>
                 <form action="/add" method="post" enctype="multipart/form-data">
                     <div class="form-group upload-btn-wrapper">
