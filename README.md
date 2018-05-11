@@ -6,7 +6,7 @@ a platform where a user can rent a product for a period of time, also can lend a
 
 ## Problem Definition:
 
-buying a new equipments is very expensive, so borrow them for a period of time would make the life easier. 
+buying a new equipments is very expensive, so borrow them for a period of time would make the life easier.
 ## User Stories:
 
 1. As a user i can register to the websites
@@ -25,7 +25,7 @@ buying a new equipments is very expensive, so borrow them for a period of time w
 
 1. **Backend:**
     + Python
-    + API   
+    + API
     + SocketIo (Chat)
 2. **Frontend:**
     + Javascript
@@ -57,3 +57,8 @@ for windows check here http://pymote.readthedocs.io/en/latest/install/windows_vi
 
 *if the chat doesn't work make sure to change the socketIo url to the Url yor are using with the port
 that you are using*
+
+## Video
+there is two format for the video:
+1. mp4
+2. the second is tscproj (it is a Camtasia studio project), to run you have to have Camtasia program.
