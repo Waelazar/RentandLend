@@ -62,3 +62,9 @@ that you are using*
 there is two format for the video:
 1. mp4
 2. the second is tscproj (it is a Camtasia studio project), to run you have to have Camtasia program.
+
+## Contributors
+1. Wael Azar => Linkedin: https://www.linkedin.com/in/wael-azar-859576135/
+2. Martin Freisehner => Xing: https://www.xing.com/profile/Martin_Freisehner
+
+*this project was part of the CS50 course that we did.*
